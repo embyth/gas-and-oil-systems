@@ -1,11 +1,29 @@
 {
   "name": "gas-and-oil-systems",
-  "version": "0.1.0",
+  "homepage": "https://gas-and-oil-systems.vercel.app/",
+  "version": "1.0.0",
   "private": true,
+  "description": "Онлайн сервіс для розрахунку режимів роботи нафто-, газопроводів, газових мереж та внутрішньобудинкових газових мереж.",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:embyth/gas-and-oil-systems.git"
+  },
+  "bugs": {
+    "url": "https://github.com/embyth/gas-and-oil-systems/issues"
+  },
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start"
+  },
+  "devDependencies": {
+    "eslint": "7.27.0",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-plugin-import": "2.23.4",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-react": "7.24.0",
+    "eslint-plugin-react-hooks": "4.2.0"
   },
   "dependencies": {
     "next": "10.2.3",
