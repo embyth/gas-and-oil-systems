@@ -1,8 +1,15 @@
-import '../assets/css/libs/normalize.css';
-import '../assets/css/style.min.css';
+import { Fragment } from "react";
 
-function MyApp({Component, pageProps}) {
-  return <Component {...pageProps} />;
-}
+import HeadWithSeo from "../components/head-with-seo/head-with-seo";
+import Layout from "../components/layout/layout";
+
+const MyApp = ({Component, pageProps}) => (
+  <Fragment>
+    <HeadWithSeo />
+    <Layout currentPage={pageProps.currentCalculation}>
+      <Component {...pageProps} />
+    </Layout>
+  </Fragment>
+);
 
 export default MyApp;
