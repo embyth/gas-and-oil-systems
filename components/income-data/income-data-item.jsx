@@ -7,6 +7,9 @@ const IncomeDataItem = ({
   max,
   step,
   demention,
+  value,
+  refItem,
+  onInputChange,
 }) => (
   <div className="data__item">
     <label htmlFor={id} className="data__label">
@@ -24,7 +27,9 @@ const IncomeDataItem = ({
         step={step}
         autoComplete="off"
         required
-        value=""
+        value={value}
+        ref={refItem}
+        onChange={onInputChange}
       />
       <span className="data__input--dimension">{demention}</span>
     </div>
