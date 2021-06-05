@@ -7,7 +7,10 @@ const HeadWithSeo = () => (
     <link rel="stylesheet" href="assets/css/style.min.css" />
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
     <link rel="icon" href="./favicon.ico" type="image/x-icon" />
-    <title>Технологічний розрахунок магістрального нафтопроводу</title>
+    <title>
+      Технологічні розрахунки газо-, нафтопроводів, газових внутрішньобудинкових
+      та кільцевих мереж
+    </title>
     <meta
       name="description"
       content="Онлайн розрахунок пропускної здатності магістрального нафтопроводу за умов заданого розташування нафтоперекачувальних станцій"
