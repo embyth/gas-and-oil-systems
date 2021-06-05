@@ -1,35 +1,35 @@
-const Intro = () => (
-  <section id="intro" className="intro">
-    <div className="section__container">
-      <h1 className="site-heading">
-        Розрахунок пропускної здатності магістрального нафтопроводу
-      </h1>
+import { useContext } from "react";
+import Link from "next/link";
 
-      <p className="intro__text">
-        Розрахунок режимів експлуатації нафтопроводу передбачає визначення
-        тисків нафти на виході нафтоперекачувальних станцій, підпорів перед ними
-        і продуктивності нафтопроводу за умов, що відрізняються від
-        розрахункових. Розв’язується також питання про регулювання режимів
-        роботи нафтопроводу з метою забезпечення проектних режимів його роботи.
-      </p>
+import ScreenContext from "../../store/screen-context";
 
-      <div className="intro__buttons">
-        <a
-          className="button button--secondary intro__button intro__button--info"
-          href="https://github.com/embyth/oil-transmission-system#readme"
-          target="_blank"
-        >
-          Інформація
-        </a>
-        <button
-          className="button button--primary intro__button intro__button--begin"
-          type="button"
-        >
-          Почати
-        </button>
+const Intro = ({ info, nextScreenId }) => {
+  const { changeScreen } = useContext(ScreenContext);
+
+  return (
+    <section id="intro" className="intro">
+      <div className="section__container">
+        <h1 className="site-heading">{info.heading}</h1>
+
+        <p className="intro__text">{info.text}</p>
+
+        <div className="intro__buttons">
+          <Link href={info.detailsHref}>
+            <a className="button button--secondary intro__button intro__button--info">
+              Інформація
+            </a>
+          </Link>
+          <button
+            className="button button--primary intro__button intro__button--begin"
+            type="button"
+            onClick={() => changeScreen(nextScreenId)}
+          >
+            Почати
+          </button>
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default Intro;
