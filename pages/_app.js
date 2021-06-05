@@ -1,15 +1,11 @@
-import { Fragment } from "react";
-
+/* eslint-disable react/jsx-props-no-spreading */
 import HeadWithSeo from "../components/head-with-seo/head-with-seo";
-import Layout from "../components/layout/layout";
 
-const MyApp = ({Component, pageProps}) => (
-  <Fragment>
+const MyApp = ({ Component, pageProps }) => (
+  <>
     <HeadWithSeo />
-    <Layout currentPage={pageProps.currentCalculation}>
-      <Component {...pageProps} />
-    </Layout>
-  </Fragment>
+    <Component {...pageProps} />
+  </>
 );
 
 export default MyApp;
