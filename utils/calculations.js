@@ -1,4 +1,5 @@
 import { OIL_TRANSMISSION_INPUT_FIELDS } from "./constants/oil-transmission/income";
+import { OIL_TRANSMISSION_STATION_FIELDS } from "./constants/oil-transmission/stations";
 import { OIL_TRANSMISSION_RESULT_FIELDS } from "./constants/oil-transmission/results";
 
 import {
@@ -38,6 +39,7 @@ export const getOilTransmissionProps = () => ({
   screensInfo: OIL_TRANSMISSION_SCREENS,
   introInfo: OIL_TRANSMISSION_INTRO_DATA,
   incomeInputFields: OIL_TRANSMISSION_INPUT_FIELDS,
+  stationFields: OIL_TRANSMISSION_STATION_FIELDS,
   resultFields: OIL_TRANSMISSION_RESULT_FIELDS,
 });
 
