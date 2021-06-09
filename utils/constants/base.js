@@ -11,4 +11,11 @@ export const SessionStorage = {
   RESULTS: `RESULTS`,
 };
 
+export const AvailableResultRowType = {
+  MAIN: `main`,
+  EXTRA: `extra`,
+  STATION: `station`,
+  SEGMENT: `segment`,
+};
+
 export const SHAKE_ANIMATION_TIMEOUT = 600;
