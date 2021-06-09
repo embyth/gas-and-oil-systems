@@ -9,7 +9,13 @@ import Results from "../results/results";
 
 import { arrayToObjectByKey } from "../../utils/common";
 
-const OilTransmission = ({ incomeInputFields, introInfo, screensInfo }) => {
+const OilTransmission = ({
+  screensInfo,
+  introInfo,
+  incomeInputFields,
+  stationFields,
+  resultFields,
+}) => {
   const { currentScreenId } = useContext(ScreenContext);
 
   const getCurrentScreen = (screenId) => {
@@ -34,11 +40,14 @@ const OilTransmission = ({ incomeInputFields, introInfo, screensInfo }) => {
 
       case OilTransmissionScreens.STATIONS.id:
         return (
-          <IncomeStations nextScreenId={OilTransmissionScreens.RESULTS.id} />
+          <IncomeStations
+            nextScreenId={OilTransmissionScreens.RESULTS.id}
+            stationFields={stationFields}
+          />
         );
 
       case OilTransmissionScreens.RESULTS.id:
-        return <Results />;
+        return <Results resultFields={resultFields} />;
 
       default:
         throw new Error(`Unexpected screen id! Value recieved: ${screenId}`);
