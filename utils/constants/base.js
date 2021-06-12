@@ -5,10 +5,10 @@ export const ErrorMessage = {
 };
 
 export const SessionStorage = {
-  INCOME_DATA: `INCOME_DATA`,
-  STATIONS: `STATIONS`,
-  SEGMENTS: `SEGMENTS`,
-  RESULTS: `RESULTS`,
+  OIL_TRANSMISSION: `OIL_TRANSMISSION`,
+  GAS_TRANSMISSION: `GAS_TRANSMISSION`,
+  GAS_INDOOR: `GAS_INDOOR`,
+  GAS_NETWORK: `GAS_NETWORK`,
 };
 
 export const AvailableResultRowType = {
