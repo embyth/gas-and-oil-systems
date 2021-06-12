@@ -10,6 +10,7 @@ import Results from "../results/results";
 import { arrayToObjectByKey } from "../../utils/common";
 
 const OilTransmission = ({
+  currentCalculation,
   screensInfo,
   introInfo,
   incomeInputFields,
@@ -35,6 +36,7 @@ const OilTransmission = ({
           <IncomeData
             incomeInputFields={incomeInputFields}
             nextScreenId={OilTransmissionScreens.STATIONS.id}
+            currentCalculation={currentCalculation}
           />
         );
 
