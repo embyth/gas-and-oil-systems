@@ -1,16 +1,17 @@
+import {
+  OIL_TRANSMISSION_SCREENS,
+  OIL_TRANSMISSION_INTRO_DATA,
+} from "./constants/oil-transmission/info";
 import { OIL_TRANSMISSION_INPUT_FIELDS } from "./constants/oil-transmission/income";
 import { OIL_TRANSMISSION_STATION_FIELDS } from "./constants/oil-transmission/stations";
 import { OIL_TRANSMISSION_RESULT_FIELDS } from "./constants/oil-transmission/results";
 
 import {
-  OIL_TRANSMISSION_INTRO_DATA,
-  OIL_TRANSMISSION_SCREENS,
-} from "./constants/oil-transmission/info";
-
-import {
-  GAS_TRANSMISSION_INTRO_DATA,
   GAS_TRANSMISSION_SCREENS,
+  GAS_TRANSMISSION_INTRO_DATA,
 } from "./constants/gas-transmission/info";
+import { GAS_TRANSMISSION_INPUT_FIELDS } from "./constants/gas-transmission/income";
+import { GAS_TRANSMISSION_RESULT_FIELDS } from "./constants/gas-transmission/results";
 
 import {
   GAS_INDOOR_INTRO_DATA,
@@ -47,6 +48,8 @@ export const getGasTransmissionProps = () => ({
   currentCalculation: AVAILABLE_CALCULATIONS.GAS_TRANSMISSION,
   screensInfo: GAS_TRANSMISSION_SCREENS,
   introInfo: GAS_TRANSMISSION_INTRO_DATA,
+  incomeInputFields: GAS_TRANSMISSION_INPUT_FIELDS,
+  resultFields: GAS_TRANSMISSION_RESULT_FIELDS,
 });
 
 export const getGasIndoorProps = () => ({
