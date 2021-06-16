@@ -19,6 +19,24 @@ const OilTransmission = ({
 }) => {
   const { currentScreenId } = useContext(ScreenContext);
 
+  const sendIncomeData = async (data) =>
+    fetch(`/api/oil-transmission/first`, {
+      method: `POST`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+  const sendStationsData = async (data) =>
+    fetch(`/api/oil-transmission/second`, {
+      method: `POST`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
   const getCurrentScreen = (screenId) => {
     const OilTransmissionScreens = arrayToObjectByKey(screensInfo, `id`);
 
@@ -37,6 +55,7 @@ const OilTransmission = ({
             incomeInputFields={incomeInputFields}
             nextScreenId={OilTransmissionScreens.STATIONS.id}
             currentCalculation={currentCalculation}
+            sendIncomeData={sendIncomeData}
           />
         );
 
@@ -45,6 +64,8 @@ const OilTransmission = ({
           <IncomeStations
             nextScreenId={OilTransmissionScreens.RESULTS.id}
             stationFields={stationFields}
+            currentCalculation={currentCalculation}
+            sendStationsData={sendStationsData}
           />
         );
 

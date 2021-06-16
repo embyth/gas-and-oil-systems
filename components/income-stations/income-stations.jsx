@@ -19,6 +19,7 @@ const IncomeStations = ({
   stationFields,
   nextScreenId,
   currentCalculation,
+  sendStationsData,
 }) => {
   const { changeScreen } = useContext(ScreenContext);
   const { getMiddleResults, getIncomeData, setResults } = useContext(
@@ -86,7 +87,7 @@ const IncomeStations = ({
     );
   };
 
-  const calcButtonClickHandler = () => {
+  const calcButtonClickHandler = async () => {
     if (!isCalcButtonPressed) {
       setIsCalcButtonPressed(true);
     }
@@ -94,41 +95,36 @@ const IncomeStations = ({
     if (isUserDataValid(inputElements.current)) {
       setIsRequestSending(true);
 
-      fetch(`/api/oil-transmission/second`, {
-        method: `POST`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userData: inputValues,
-          middleResults,
-          incomeData,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.message) {
-            notificationStore.addNotification({
-              title: "Помилка!",
-              message: data.message,
-              type: "danger",
-              insert: "bottom",
-              container: "bottom-right",
-              animationIn: ["animate__animated", "animate__fadeIn"],
-              animationOut: ["animate__animated", "animate__fadeOut"],
-              dismiss: {
-                duration: 5000,
-                onScreen: true,
-              },
-            });
+      const userValues = {
+        userData: inputValues,
+        middleResults,
+        incomeData,
+      };
 
-            return;
-          }
+      const response = await sendStationsData(userValues);
+      const data = await response.json();
 
-          setResults(data);
-          changeScreen(nextScreenId);
-        })
-        .finally(() => setIsRequestSending(false));
+      if (!response.ok) {
+        notificationStore.addNotification({
+          title: "Помилка!",
+          message: data.message,
+          type: "danger",
+          insert: "bottom",
+          container: "bottom-right",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
+
+        return;
+      }
+
+      setResults(data);
+      changeScreen(nextScreenId);
+      setIsRequestSending(false);
     } else {
       toggleShake(sectionRef.current);
     }
