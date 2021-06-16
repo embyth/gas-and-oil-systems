@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { AVAILABLE_CALCULATIONS } from "../../utils/calculations";
+import { AvailableCalculation } from "../../utils/constants/base";
 
 const SiteNavigation = ({
   currentCalculation,
@@ -39,7 +39,7 @@ const SiteNavigation = ({
       <ul className="site-aside__links-list">
         <li
           className={`site-aside__links-item ${
-            currentCalculation === AVAILABLE_CALCULATIONS.GAS_NETWORK
+            currentCalculation === AvailableCalculation.GAS_NETWORK
               ? `site-aside__links-item--active`
               : ``
           }`}
@@ -47,7 +47,7 @@ const SiteNavigation = ({
           <Link href="/gas-network">
             <a
               className={`${
-                currentCalculation === AVAILABLE_CALCULATIONS.GAS_NETWORK
+                currentCalculation === AvailableCalculation.GAS_NETWORK
                   ? `site-aside__links-item--disabled`
                   : ``
               }`}
@@ -58,7 +58,7 @@ const SiteNavigation = ({
         </li>
         <li
           className={`site-aside__links-item ${
-            currentCalculation === AVAILABLE_CALCULATIONS.GAS_TRANSMISSION
+            currentCalculation === AvailableCalculation.GAS_TRANSMISSION
               ? `site-aside__links-item--active`
               : ``
           }`}
@@ -66,7 +66,7 @@ const SiteNavigation = ({
           <Link href="/gas-transmission">
             <a
               className={`${
-                currentCalculation === AVAILABLE_CALCULATIONS.GAS_TRANSMISSION
+                currentCalculation === AvailableCalculation.GAS_TRANSMISSION
                   ? `site-aside__links-item--disabled`
                   : ``
               }`}
@@ -77,7 +77,7 @@ const SiteNavigation = ({
         </li>
         <li
           className={`site-aside__links-item ${
-            currentCalculation === AVAILABLE_CALCULATIONS.GAS_INDOOR
+            currentCalculation === AvailableCalculation.GAS_INDOOR
               ? `site-aside__links-item--active`
               : ``
           }`}
@@ -85,7 +85,7 @@ const SiteNavigation = ({
           <Link href="/gas-indoor">
             <a
               className={`${
-                currentCalculation === AVAILABLE_CALCULATIONS.GAS_INDOOR
+                currentCalculation === AvailableCalculation.GAS_INDOOR
                   ? `site-aside__links-item--disabled`
                   : ``
               }`}
@@ -96,7 +96,7 @@ const SiteNavigation = ({
         </li>
         <li
           className={`site-aside__links-item ${
-            currentCalculation === AVAILABLE_CALCULATIONS.OIL_TRANSMISSION
+            currentCalculation === AvailableCalculation.OIL_TRANSMISSION
               ? `site-aside__links-item--active`
               : ``
           }`}
@@ -104,7 +104,7 @@ const SiteNavigation = ({
           <Link href="/oil-transmission">
             <a
               className={`${
-                currentCalculation === AVAILABLE_CALCULATIONS.OIL_TRANSMISSION
+                currentCalculation === AvailableCalculation.OIL_TRANSMISSION
                   ? `site-aside__links-item--disabled`
                   : ``
               }`}

@@ -6,7 +6,7 @@ import { CalculationDataContextProvider } from "../store/calculation-data-contex
 import Layout from "../components/layout/layout";
 import OilTransmission from "../components/oil-transmission/oil-transmission";
 
-import { getOilTransmissionProps } from "../utils/calculations";
+import { getOilTransmissionProps } from "../utils/props-collector";
 
 const OilTransmissionPage = ({
   currentCalculation,

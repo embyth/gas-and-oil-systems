@@ -12,10 +12,14 @@ import IncomeStationsRow from "./income-stations-row";
 
 import {
   SHAKE_ANIMATION_TIMEOUT,
-  SessionStorage,
+  LocalStorage,
 } from "../../utils/constants/base";
 
-const IncomeStations = ({ stationFields, nextScreenId }) => {
+const IncomeStations = ({
+  stationFields,
+  nextScreenId,
+  currentCalculation,
+}) => {
   const { changeScreen } = useContext(ScreenContext);
   const { getMiddleResults, getIncomeData, setResults } = useContext(
     CalculationDataContext
@@ -47,13 +51,13 @@ const IncomeStations = ({ stationFields, nextScreenId }) => {
 
   useEffect(() => {
     const cachedValues = JSON.parse(
-      sessionStorage.getItem(SessionStorage.STATIONS)
+      localStorage.getItem(LocalStorage[currentCalculation].STATIONS)
     );
 
     if (cachedValues) {
       setInputValues(cachedValues);
     }
-  }, [stationFields, stations]);
+  }, [stationFields, stations, currentCalculation]);
 
   const inputChangeHandler = (evt) => {
     const {
@@ -76,8 +80,8 @@ const IncomeStations = ({ stationFields, nextScreenId }) => {
 
     setInputValues(updatedValues);
 
-    sessionStorage.setItem(
-      SessionStorage.STATIONS,
+    localStorage.setItem(
+      LocalStorage[currentCalculation].STATIONS,
       JSON.stringify(updatedValues)
     );
   };

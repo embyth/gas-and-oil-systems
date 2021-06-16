@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import parse from "html-react-parser";
 
 const ResultsTableStationRows = ({ results, stationData }) => {
   const getStationNames = (stationIndex) => {
@@ -27,7 +28,7 @@ const ResultsTableStationRows = ({ results, stationData }) => {
             id: valueId,
             parameter: stationParameter,
             marking: stationMarking,
-            demention: stationDemention,
+            dimension: stationdimension,
           }) => (
             <tr
               key={`${valueId}-${station[valueId]}-${stationFrom}-${stationTo}`}
@@ -37,13 +38,13 @@ const ResultsTableStationRows = ({ results, stationData }) => {
                 {stationParameter}
               </td>
               <td className="data__table-cell data__table-cell--marking">
-                {stationMarking}
+                {parse(stationMarking)}
               </td>
               <td className="data__table-cell data__table-cell--value">
                 {station[valueId]}
               </td>
               <td className="data__table-cell data__table-cell--dimension">
-                {stationDemention}
+                {parse(stationdimension)}
               </td>
             </tr>
           )

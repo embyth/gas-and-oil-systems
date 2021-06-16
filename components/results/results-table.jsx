@@ -23,13 +23,13 @@ const ResultsTable = ({ resultFields }) => {
       </thead>
       <tbody className="data__table-body">
         {RESULTS.map(
-          ({ parameter, demention, marking, isFullRow, id, type, data }) => (
+          ({ parameter, dimension, marking, isFullRow, id, type, data }) => (
             <ResultsTableRow
               key={id}
               id={id}
               parameter={parameter}
               marking={marking}
-              demention={demention}
+              dimension={dimension}
               isFullRow={isFullRow}
               type={type}
               stationData={data}

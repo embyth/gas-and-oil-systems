@@ -6,13 +6,14 @@ import { CalculationDataContextProvider } from "../store/calculation-data-contex
 import Layout from "../components/layout/layout";
 import GasTransmission from "../components/gas-transmission/gas-transmission";
 
-import { getGasTransmissionProps } from "../utils/calculations";
+import { getGasTransmissionProps } from "../utils/props-collector";
 
 const GasTransmissionPage = ({
   currentCalculation,
   screensInfo,
   introInfo,
   incomeInputFields,
+  incomeModalFields,
   resultFields,
 }) => (
   <>
@@ -27,6 +28,7 @@ const GasTransmissionPage = ({
             screensInfo={screensInfo}
             introInfo={introInfo}
             incomeInputFields={incomeInputFields}
+            incomeModalFields={incomeModalFields}
             resultFields={resultFields}
           />
         </Layout>

@@ -1,3 +1,5 @@
+import parse from "html-react-parser";
+
 import ResultsTableStationRows from "./results-table-station-rows";
 
 import { AvailableResultRowType } from "../../utils/constants/base";
@@ -6,7 +8,7 @@ const ResultsTableRow = ({
   id,
   parameter,
   marking,
-  demention,
+  dimension,
   type,
   results,
   stationData,
@@ -31,12 +33,14 @@ const ResultsTableRow = ({
       <td className="data__table-cell data__table-cell--parameter">
         {parameter}
       </td>
-      <td className="data__table-cell data__table-cell--marking">{marking}</td>
+      <td className="data__table-cell data__table-cell--marking">
+        {parse(marking)}
+      </td>
       <td className="data__table-cell data__table-cell--value">
         {results[type][id]}
       </td>
       <td className="data__table-cell data__table-cell--dimension">
-        {demention}
+        {parse(dimension)}
       </td>
     </tr>
   ) : null;

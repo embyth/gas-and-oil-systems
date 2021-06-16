@@ -4,9 +4,24 @@ export const ErrorMessage = {
   RANGE_UNDERFLOW: `Значення не може бути менше `,
 };
 
-export const SessionStorage = {
-  OIL_TRANSMISSION: `OIL_TRANSMISSION`,
-  GAS_TRANSMISSION: `GAS_TRANSMISSION`,
+export const AvailableCalculation = {
+  OIL_TRANSMISSION: "OIL_TRANSMISSION",
+  GAS_TRANSMISSION: "GAS_TRANSMISSION",
+  GAS_INDOOR: "GAS_INDOOR",
+  GAS_NETWORK: "GAS_NETWORK",
+};
+
+export const LocalStorage = {
+  OIL_TRANSMISSION: {
+    INCOME: `${AvailableCalculation.OIL_TRANSMISSION}-INCOME`,
+    STATIONS: `${AvailableCalculation.OIL_TRANSMISSION}-STATIONS`,
+    RESULTS: `${AvailableCalculation.OIL_TRANSMISSION}-RESULTS`,
+  },
+  GAS_TRANSMISSION: {
+    INCOME: `${AvailableCalculation.GAS_TRANSMISSION}-INCOME`,
+    MODAL: `${AvailableCalculation.GAS_TRANSMISSION}-MODAL`,
+    RESULTS: `${AvailableCalculation.GAS_TRANSMISSION}-RESULTS`,
+  },
   GAS_INDOOR: `GAS_INDOOR`,
   GAS_NETWORK: `GAS_NETWORK`,
 };
