@@ -9,15 +9,24 @@ import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
 
 import IncomeDataItem from "./income-data-item";
+import IncomeDataItemSelect from "./income-data-item-select";
+import IncomeDataModal from "./income-data-modal";
 
 import {
   SHAKE_ANIMATION_TIMEOUT,
-  SessionStorage,
+  AvailableCalculation,
+  LocalStorage,
 } from "../../utils/constants/base";
 
-const IncomeData = ({ incomeInputFields, nextScreenId }) => {
+const IncomeData = ({
+  incomeInputFields,
+  incomeModalFields,
+  nextScreenId,
+  currentCalculation,
+  sendIncomeData,
+}) => {
   const { changeScreen } = useContext(ScreenContext);
-  const { setIncomeData, setMiddleResults } = useContext(
+  const { setIncomeData, setMiddleResults, setResults } = useContext(
     CalculationDataContext
   );
 
@@ -25,89 +34,120 @@ const IncomeData = ({ incomeInputFields, nextScreenId }) => {
   const { toggleShake } = useInvalidShake(SHAKE_ANIMATION_TIMEOUT);
 
   const initialValues = incomeInputFields.reduce(
-    (acc, item) => ({ ...acc, [item.id]: "" }),
+    (acc, item) =>
+      item.type === `select`
+        ? {
+            ...acc,
+            ...item.data.reduce(
+              (prev, select) => ({ ...prev, [select.id]: "" }),
+              {}
+            ),
+          }
+        : { ...acc, [item.id]: "" },
     {}
   );
   const [inputValues, setInputValues] = useState(initialValues);
   const [isNextButtonPressed, setIsNextButtonPressed] = useState(false);
   const [isRequestSending, setIsRequestSending] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalValid, setIsModalValid] = useState(false);
+  const [validateModalOnOpen, setValidateModalOnOpen] = useState(false);
 
   const sectionRef = useRef();
   const inputElements = useRef([]);
 
   useEffect(() => {
     const cachedValues = JSON.parse(
-      sessionStorage.getItem(SessionStorage.INCOME_DATA)
+      localStorage.getItem(LocalStorage[currentCalculation].INCOME)
     );
 
     if (cachedValues) {
       setInputValues(cachedValues);
     }
-  }, []);
+  }, [currentCalculation]);
 
-  const inputChangeHandler = (evt) => {
-    const { id, value } = evt.target;
+  const modalCloseHandler = () => {
+    setValidateModalOnOpen(false);
+    setIsModalOpen(false);
+  };
 
+  const modalOpenHandler = () => {
+    setIsModalOpen(true);
+  };
+
+  const updateInputValues = (id, value, additional = {}) => {
     const updatedValues = {
       ...inputValues,
       [id]: value,
+      ...additional,
     };
+
+    setInputValues(updatedValues);
+    localStorage.setItem(
+      LocalStorage[currentCalculation].INCOME,
+      JSON.stringify(updatedValues)
+    );
+  };
+
+  const inputChangeHandler = (evt) => {
+    const { id, value } = evt.target;
 
     if (isNextButtonPressed) {
       checkInputValidity(evt.target);
     }
 
-    setInputValues(updatedValues);
-    sessionStorage.setItem(
-      SessionStorage.INCOME_DATA,
-      JSON.stringify(updatedValues)
-    );
+    updateInputValues(id, value);
   };
 
-  const nextButtonClickHandler = () => {
+  const submitButtonClickHandler = async () => {
     if (!isNextButtonPressed) {
       setIsNextButtonPressed(true);
     }
 
-    if (isUserDataValid(inputElements.current)) {
-      const incomeData = JSON.parse(
-        sessionStorage.getItem(SessionStorage.INCOME_DATA)
-      );
+    if (
+      currentCalculation === AvailableCalculation.GAS_TRANSMISSION &&
+      inputValues.gpu === `custom` &&
+      inputValues.supercharger === `custom` &&
+      !isModalValid
+    ) {
+      setValidateModalOnOpen(true);
+      setIsModalOpen(true);
+      return;
+    }
 
-      setIncomeData(incomeData);
+    if (isUserDataValid(inputElements.current)) {
+      setIncomeData(inputValues);
       setIsRequestSending(true);
 
-      fetch(`/api/oil-transmission/first`, {
-        method: `POST`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(incomeData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.message) {
-            notificationStore.addNotification({
-              title: "Помилка!",
-              message: data.message,
-              type: "danger",
-              insert: "bottom",
-              container: "bottom-right",
-              animationIn: ["animate__animated", "animate__fadeIn"],
-              animationOut: ["animate__animated", "animate__fadeOut"],
-              dismiss: {
-                duration: 5000,
-                onScreen: true,
-              },
-            });
+      const response = await sendIncomeData(inputValues);
+      const data = await response.json();
 
-            return;
-          }
+      if (!response.ok) {
+        notificationStore.addNotification({
+          title: "Помилка!",
+          message: data.message,
+          type: "danger",
+          insert: "bottom",
+          container: "bottom-right",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+          },
+        });
 
-          setMiddleResults(data);
-          changeScreen(nextScreenId);
-        })
-        .finally(() => setIsRequestSending(false));
+        return;
+      }
+
+      if (currentCalculation === AvailableCalculation.OIL_TRANSMISSION) {
+        setMiddleResults(data);
+      } else {
+        setResults(data);
+      }
+
+      setIsRequestSending(false);
+      changeScreen(nextScreenId);
     } else {
       toggleShake(sectionRef.current);
     }
@@ -115,38 +155,66 @@ const IncomeData = ({ incomeInputFields, nextScreenId }) => {
 
   return (
     <section id="income-data" className="income-data" ref={sectionRef}>
+      {isModalOpen && (
+        <IncomeDataModal
+          incomeModalFields={incomeModalFields}
+          updateInputValues={updateInputValues}
+          currentCalculation={currentCalculation}
+          updateModalValidationStatus={setIsModalValid}
+          validateOnOpen={validateModalOnOpen}
+          updateValidateOnOpen={setValidateModalOnOpen}
+          onModalClose={modalCloseHandler}
+        />
+      )}
       <div className="section__container">
         <h2 className="section-heading">Вихідні дані для розрахунку</h2>
 
         <fieldset className="data__fieldset">
           <div className="data__fieldset-replacer">
             <div className="data__container">
-              {incomeInputFields.map((item, index) => (
-                <IncomeDataItem
-                  key={item.id}
-                  definition={item.definition}
-                  label={item.label}
-                  id={item.id}
-                  placeholder={item.placeholder}
-                  min={item.min}
-                  max={item.max}
-                  step={item.step}
-                  demention={item.demention}
-                  refItem={(element) =>
-                    inputElements.current.splice(index, 1, element)
-                  }
-                  value={inputValues[item.id]}
-                  onInputChange={inputChangeHandler}
-                />
-              ))}
+              {incomeInputFields.map((item, index) =>
+                item.type === `select` ? (
+                  <IncomeDataItemSelect
+                    key={item.id}
+                    label={item.label}
+                    data={item.data}
+                    currentCalculation={currentCalculation}
+                    gpuRef={(element) =>
+                      inputElements.current.splice(index, 1, element)
+                    }
+                    superchargerRef={(element) =>
+                      inputElements.current.splice(index + 1, 1, element)
+                    }
+                    updateInputValues={updateInputValues}
+                    onModalOpen={modalOpenHandler}
+                  />
+                ) : (
+                  <IncomeDataItem
+                    key={item.id}
+                    definition={item.definition}
+                    label={item.label}
+                    id={item.id}
+                    placeholder={item.placeholder}
+                    min={item.min}
+                    max={item.max}
+                    step={item.step}
+                    dimension={item.dimension}
+                    refItem={(element) =>
+                      inputElements.current.splice(index, 1, element)
+                    }
+                    values={inputValues}
+                    onInputChange={inputChangeHandler}
+                  />
+                )
+              )}
               <div className="data__item">
                 <button
                   className="button button--primary data__button data__button--next"
                   type="button"
                   disabled={isRequestSending}
-                  onClick={nextButtonClickHandler}
+                  onClick={submitButtonClickHandler}
                 >
-                  Далі
+                  {nextScreenId === `RESULTS` ? `Розрахувати` : `Далі`}
                 </button>
               </div>
             </div>
