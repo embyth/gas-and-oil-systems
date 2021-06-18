@@ -2,6 +2,8 @@ import { useContext, useState, useRef, useEffect } from "react";
 
 import { store as notificationStore } from "react-notifications-component";
 
+import useKeyboardEvent from "../../hooks/useKeyboardEvent";
+
 import ScreenContext from "../../store/screen-context";
 import CalculationDataContext from "../../store/calculation-data-context";
 
@@ -74,6 +76,8 @@ const IncomeData = ({
   const modalOpenHandler = () => {
     setIsModalOpen(true);
   };
+
+  useKeyboardEvent(`Escape`, modalCloseHandler, isModalOpen);
 
   const updateInputValues = (id, value, additional = {}) => {
     const updatedValues = {
