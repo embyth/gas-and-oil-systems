@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { LocalStorage } from "../../utils/constants/base";
+import { LocalStorage } from "../../utils/const";
 
 const IncomeDataItemSelect = ({
   label,

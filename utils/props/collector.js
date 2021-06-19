@@ -1,30 +1,27 @@
 import {
   OIL_TRANSMISSION_SCREENS,
   OIL_TRANSMISSION_INTRO_DATA,
-} from "./constants/oil-transmission/info";
-import { OIL_TRANSMISSION_INPUT_FIELDS } from "./constants/oil-transmission/income";
-import { OIL_TRANSMISSION_STATION_FIELDS } from "./constants/oil-transmission/stations";
-import { OIL_TRANSMISSION_RESULT_FIELDS } from "./constants/oil-transmission/results";
+} from "./oil-transmission/info";
+import { OIL_TRANSMISSION_INPUT_FIELDS } from "./oil-transmission/income";
+import { OIL_TRANSMISSION_STATION_FIELDS } from "./oil-transmission/stations";
+import { OIL_TRANSMISSION_RESULT_FIELDS } from "./oil-transmission/results";
 
 import {
   GAS_TRANSMISSION_SCREENS,
   GAS_TRANSMISSION_INTRO_DATA,
-} from "./constants/gas-transmission/info";
-import { GAS_TRANSMISSION_INPUT_FIELDS } from "./constants/gas-transmission/income";
-import { GAS_TRANSMISSION_MODAL_FIELDS } from "./constants/gas-transmission/modal";
-import { GAS_TRANSMISSION_RESULT_FIELDS } from "./constants/gas-transmission/results";
+} from "./gas-transmission/info";
+import { GAS_TRANSMISSION_INPUT_FIELDS } from "./gas-transmission/income";
+import { GAS_TRANSMISSION_MODAL_FIELDS } from "./gas-transmission/modal";
+import { GAS_TRANSMISSION_RESULT_FIELDS } from "./gas-transmission/results";
 
-import {
-  GAS_INDOOR_INTRO_DATA,
-  GAS_INDOOR_SCREENS,
-} from "./constants/gas-indoor/info";
+import { GAS_INDOOR_INTRO_DATA, GAS_INDOOR_SCREENS } from "./gas-indoor/info";
 
 import {
   GAS_NETWORK_INTRO_DATA,
   GAS_NETWORK_SCREENS,
-} from "./constants/gas-network/info";
+} from "./gas-network/info";
 
-import { AvailableCalculation } from "./constants/base";
+import { AvailableCalculation } from "../const";
 
 export const getIndexProps = () => ({
   currentCalculation: null,

@@ -6,10 +6,7 @@ import useInvalidShake from "../../hooks/useInvalidShake";
 
 import IncomeDataItem from "./income-data-item";
 
-import {
-  SHAKE_ANIMATION_TIMEOUT,
-  LocalStorage,
-} from "../../utils/constants/base";
+import { SHAKE_ANIMATION_TIMEOUT, LocalStorage } from "../../utils/const";
 
 const IncomeDataModal = ({
   incomeModalFields,

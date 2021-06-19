@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { AvailableCalculation } from "../../utils/constants/base";
+import { AvailableCalculation } from "../../utils/const";
 
 const SiteNavigation = ({
   currentCalculation,

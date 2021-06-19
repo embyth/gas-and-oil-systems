@@ -6,7 +6,7 @@ import { CalculationDataContextProvider } from "../store/calculation-data-contex
 import Layout from "../components/layout/layout";
 import GasTransmission from "../components/gas-transmission/gas-transmission";
 
-import { getGasTransmissionProps } from "../utils/props-collector";
+import { getGasTransmissionProps } from "../utils/props/collector";
 
 const GasTransmissionPage = ({
   currentCalculation,

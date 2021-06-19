@@ -10,10 +10,7 @@ import useInvalidShake from "../../hooks/useInvalidShake";
 
 import IncomeStationsRow from "./income-stations-row";
 
-import {
-  SHAKE_ANIMATION_TIMEOUT,
-  LocalStorage,
-} from "../../utils/constants/base";
+import { SHAKE_ANIMATION_TIMEOUT, LocalStorage } from "../../utils/const";
 
 const IncomeStations = ({
   stationFields,

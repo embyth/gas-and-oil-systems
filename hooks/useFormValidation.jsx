@@ -1,4 +1,4 @@
-import { ErrorMessage } from "../utils/constants/base";
+import { ErrorMessage } from "../utils/const";
 /**
  * useFormValidation - form validation hook for data inputs
  */

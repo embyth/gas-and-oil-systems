@@ -18,7 +18,7 @@ import {
   SHAKE_ANIMATION_TIMEOUT,
   AvailableCalculation,
   LocalStorage,
-} from "../../utils/constants/base";
+} from "../../utils/const";
 
 const IncomeData = ({
   incomeInputFields,

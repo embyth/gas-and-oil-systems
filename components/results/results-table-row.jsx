@@ -2,7 +2,7 @@ import parse from "html-react-parser";
 
 import ResultsTableStationRows from "./results-table-station-rows";
 
-import { AvailableResultRowType } from "../../utils/constants/base";
+import { AvailableResultRowType } from "../../utils/const";
 
 const ResultsTableRow = ({
   id,
