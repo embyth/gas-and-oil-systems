@@ -19,28 +19,27 @@ export const adaptIncomeDataToServer = (clientData) => ({
 
 export const adaptStationsDataToServer = (clientData) => ({
   stationsData: {
-    lengths: clientData.userData
+    lengths: clientData.incomeStations
       .map(({ length }) => (length === "" ? length : +length))
       .filter((item) => typeof item === "number"),
-    keyId: clientData.userData.map((item) => item.keyId),
-    geoPoints: clientData.userData
+    geoPoints: clientData.incomeStations
       .map((item) =>
         item["geo-point"] === "" ? item["geo-point"] : +item["geo-point"]
       )
       .filter((item) => typeof item === "number"),
-    pumpUnits: clientData.userData
+    pumpUnits: clientData.incomeStations
       .map((item) =>
         item["pump-quant"] === "" ? item["pump-quant"] : +item["pump-quant"]
       )
       .filter((item) => typeof item === "number"),
-    pressureMinLimits: clientData.userData
+    pressureMinLimits: clientData.incomeStations
       .map((item) =>
         item["min-pressure"] === ""
           ? item["min-pressure"]
           : +item["min-pressure"]
       )
       .filter((item) => typeof item === "number"),
-    pressureMaxLimits: clientData.userData
+    pressureMaxLimits: clientData.incomeStations
       .map((item) =>
         item["max-pressure"] === ""
           ? item["max-pressure"]
@@ -48,7 +47,7 @@ export const adaptStationsDataToServer = (clientData) => ({
       )
       .filter((item) => typeof item === "number"),
   },
-  results: { ...clientData.middleResults },
+  results: { ...clientData.firstCalcResults },
   incomeData: {
     aCoefMain: +clientData.incomeData["a-coef"],
     bCoefMain: +clientData.incomeData["b-coef"],
