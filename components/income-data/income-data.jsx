@@ -1,14 +1,12 @@
 import { useContext, useState, useRef, useEffect } from "react";
 
-import { store as notificationStore } from "react-notifications-component";
-
-import useKeyboardEvent from "../../hooks/useKeyboardEvent";
-
 import ScreenContext from "../../store/screen-context";
 import CalculationDataContext from "../../store/calculation-data-context";
 
 import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
+import useKeyboardEvent from "../../hooks/useKeyboardEvent";
+import useNotification from "../../hooks/useNotification";
 
 import IncomeDataItem from "./income-data-item";
 import IncomeDataItemSelect from "./income-data-item-select";
@@ -28,12 +26,11 @@ const IncomeData = ({
   sendIncomeData,
 }) => {
   const { changeScreen } = useContext(ScreenContext);
-  const { setIncomeData, setMiddleResults, setResults } = useContext(
-    CalculationDataContext
-  );
+  const { setIncomeData, setResults } = useContext(CalculationDataContext);
 
   const { isUserDataValid, checkInputValidity } = useFormValidation();
   const { toggleShake } = useInvalidShake(SHAKE_ANIMATION_TIMEOUT);
+  const { spawnErrorNotification } = useNotification();
 
   const initialValues = incomeInputFields.reduce(
     (acc, item) =>
@@ -103,6 +100,14 @@ const IncomeData = ({
     updateInputValues(id, value);
   };
 
+  const sendDataSuccessHandler = (data) => {
+    setResults(data);
+  };
+
+  const sendDataErrorHandler = (data) => {
+    spawnErrorNotification(data.message || "Невідома помилка!");
+  };
+
   const submitButtonClickHandler = async () => {
     if (!isNextButtonPressed) {
       setIsNextButtonPressed(true);
@@ -123,32 +128,11 @@ const IncomeData = ({
       setIncomeData(inputValues);
       setIsRequestSending(true);
 
-      const response = await sendIncomeData(inputValues);
-      const data = await response.json();
-
-      if (!response.ok) {
-        notificationStore.addNotification({
-          title: "Помилка!",
-          message: data.message,
-          type: "danger",
-          insert: "bottom",
-          container: "bottom-right",
-          animationIn: ["animate__animated", "animate__fadeIn"],
-          animationOut: ["animate__animated", "animate__fadeOut"],
-          dismiss: {
-            duration: 5000,
-            onScreen: true,
-          },
-        });
-
-        return;
-      }
-
-      if (currentCalculation === AvailableCalculation.OIL_TRANSMISSION) {
-        setMiddleResults(data);
-      } else {
-        setResults(data);
-      }
+      await sendIncomeData(
+        inputValues,
+        sendDataSuccessHandler,
+        sendDataErrorHandler
+      );
 
       setIsRequestSending(false);
       changeScreen(nextScreenId);
