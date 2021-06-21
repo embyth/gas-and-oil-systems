@@ -7,25 +7,26 @@ const calculationDataReducer = (state, action) => {
         ...state,
         INCOME_DATA: action.payload,
       };
+
     case "SET_STATIONS_DATA":
       return {
         ...state,
         STATIONS_DATA: action.payload,
       };
+
     case "SET_SEGMENTS_DATA":
       return {
         ...state,
         SEGMENTS_DATA: action.payload,
       };
-    case "SET_MIDDLE_RESULTS":
-      return {
-        ...state,
-        MIDDLE_RESULTS: action.payload,
-      };
+
     case "SET_RESULTS":
       return {
         ...state,
-        RESULTS: action.payload,
+        RESULTS: {
+          ...state.RESULTS,
+          ...action.payload,
+        },
       };
 
     default:
@@ -50,10 +51,6 @@ export const CalculationDataContextProvider = ({ children }) => {
     dispatch({ type: "SET_SEGMENTS_DATA", payload: data });
   };
 
-  const setMiddleResults = (results) => {
-    dispatch({ type: "SET_MIDDLE_RESULTS", payload: results });
-  };
-
   const setResults = (results) => {
     dispatch({ type: "SET_RESULTS", payload: results });
   };
@@ -64,20 +61,16 @@ export const CalculationDataContextProvider = ({ children }) => {
 
   const getSegmentsData = () => state.SEGMENTS_DATA;
 
-  const getMiddleResults = () => state.MIDDLE_RESULTS;
-
   const getResults = () => state.RESULTS;
 
   const context = {
     setIncomeData,
     setStationsData,
     setSegmentsData,
-    setMiddleResults,
     setResults,
     getIncomeData,
     getStationsData,
     getSegmentsData,
-    getMiddleResults,
     getResults,
     calcState: state,
   };
