@@ -19,14 +19,24 @@ const OilTransmission = ({
 }) => {
   const { currentScreenId } = useContext(ScreenContext);
 
-  const sendIncomeData = async (data) =>
-    fetch(`/api/oil-transmission/first`, {
+  const sendIncomeData = async (inputData, onSuccess, onError) => {
+    const response = await fetch(`/api/oil-transmission/first`, {
       method: `POST`,
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(inputData),
     });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      onError(data);
+      return;
+    }
+
+    onSuccess(data);
+  };
 
   const sendStationsData = async (data) =>
     fetch(`/api/oil-transmission/second`, {

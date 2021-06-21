@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState, useRef } from "react";
 
-import { store as notificationStore } from "react-notifications-component";
-
 import ScreenContext from "../../store/screen-context";
 import CalculationDataContext from "../../store/calculation-data-context";
 
 import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
+import useNotification from "../../hooks/useNotification";
 
 import IncomeStationsRow from "./income-stations-row";
 
@@ -19,23 +18,25 @@ const IncomeStations = ({
   sendStationsData,
 }) => {
   const { changeScreen } = useContext(ScreenContext);
-  const { getMiddleResults, getIncomeData, setResults } = useContext(
+  const { getResults, getIncomeData, setResults } = useContext(
     CalculationDataContext
   );
 
   const { isUserDataValid, checkInputValidity } = useFormValidation();
   const { toggleShake } = useInvalidShake(SHAKE_ANIMATION_TIMEOUT);
+  const { spawnErrorNotification } = useNotification();
 
   const incomeData = getIncomeData();
-  const middleResults = getMiddleResults();
-  const { stations } = middleResults;
+  const { firstCalcResults, stationsProps } = getResults();
 
-  const initialValues = stations.map((station) =>
+  const sectionRef = useRef();
+  const inputElements = useRef([]);
+
+  const initialValues = stationsProps.map(() =>
     stationFields.reduce(
       (acc, item) => ({
         ...acc,
         [item.id]: "",
-        keyId: station.uniqId,
       }),
       {}
     )
@@ -43,9 +44,6 @@ const IncomeStations = ({
   const [inputValues, setInputValues] = useState(initialValues);
   const [isCalcButtonPressed, setIsCalcButtonPressed] = useState(false);
   const [isRequestSending, setIsRequestSending] = useState(false);
-
-  const sectionRef = useRef();
-  const inputElements = useRef([]);
 
   useEffect(() => {
     const cachedValues = JSON.parse(
@@ -55,7 +53,7 @@ const IncomeStations = ({
     if (cachedValues) {
       setInputValues(cachedValues);
     }
-  }, [stationFields, stations, currentCalculation]);
+  }, [stationFields, currentCalculation]);
 
   const inputChangeHandler = (evt) => {
     const {
@@ -93,35 +91,22 @@ const IncomeStations = ({
       setIsRequestSending(true);
 
       const userValues = {
-        userData: inputValues,
-        middleResults,
         incomeData,
+        incomeStations: inputValues,
+        firstCalcResults,
       };
 
       const response = await sendStationsData(userValues);
       const data = await response.json();
 
       if (!response.ok) {
-        notificationStore.addNotification({
-          title: "Помилка!",
-          message: data.message,
-          type: "danger",
-          insert: "bottom",
-          container: "bottom-right",
-          animationIn: ["animate__animated", "animate__fadeIn"],
-          animationOut: ["animate__animated", "animate__fadeOut"],
-          dismiss: {
-            duration: 5000,
-            onScreen: true,
-          },
-        });
-
+        spawnErrorNotification(data.message);
         return;
       }
 
       setResults(data);
-      changeScreen(nextScreenId);
       setIsRequestSending(false);
+      changeScreen(nextScreenId);
     } else {
       toggleShake(sectionRef.current);
     }
@@ -164,12 +149,12 @@ const IncomeStations = ({
                 <tbody className="data__table-body">
                   {inputValues.map((item, index) => (
                     <IncomeStationsRow
-                      key={item.keyId}
+                      key={stationsProps[index].uniqId}
                       data={item}
                       station={index + 1}
                       isMainStation={index === 0}
                       isEndPoint={index === inputValues.length - 1}
-                      placeholders={stations[index].placeholders}
+                      placeholders={stationsProps[index].placeholders}
                       refItems={inputElements}
                       onInputChange={inputChangeHandler}
                     />

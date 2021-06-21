@@ -47,7 +47,7 @@ const IncomeStationsRow = ({
           placeholder={isEndPoint ? `` : placeholders.length}
           autoComplete="off"
           min="10"
-          max="160"
+          max="175"
           step="0.1"
           name="length"
           ref={(element) => getRef(element, 0)}
