@@ -3,6 +3,7 @@ const IncomeStationsRow = ({
   station,
   isMainStation,
   isEndPoint,
+  placeholders,
   onInputChange,
   refItems,
 }) => {
@@ -43,7 +44,7 @@ const IncomeStationsRow = ({
         <input
           type="number"
           className="data__table-input data__table-input--length"
-          placeholder={`1${station}4`}
+          placeholder={isEndPoint ? `` : placeholders.length}
           autoComplete="off"
           min="10"
           max="160"
@@ -65,7 +66,7 @@ const IncomeStationsRow = ({
         <input
           type="number"
           className="data__table-input data__table-input--geo-point"
-          placeholder={`${station}7`}
+          placeholder={placeholders["geo-point"]}
           autoComplete="off"
           step="0.01"
           name="geo-point"
@@ -84,7 +85,7 @@ const IncomeStationsRow = ({
         <input
           type="number"
           className="data__table-input data__table-input--pump-quant"
-          placeholder={isEndPoint ? `` : `3`}
+          placeholder={isEndPoint ? `` : placeholders["pump-quant"]}
           autoComplete="off"
           min="1"
           max="6"

@@ -169,6 +169,7 @@ const IncomeStations = ({
                       station={index + 1}
                       isMainStation={index === 0}
                       isEndPoint={index === inputValues.length - 1}
+                      placeholders={stations[index].placeholders}
                       refItems={inputElements}
                       onInputChange={inputChangeHandler}
                     />
