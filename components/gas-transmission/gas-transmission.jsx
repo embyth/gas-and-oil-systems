@@ -18,14 +18,24 @@ const GasTransmission = ({
 }) => {
   const { currentScreenId } = useContext(ScreenContext);
 
-  const sendIncomeData = async (data) =>
-    fetch(`/api/gas-transmission/calculate`, {
+  const sendIncomeData = async (inputData, onSuccess, onError) => {
+    const response = await fetch(`/api/gas-transmission/calculate`, {
       method: `POST`,
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(inputData),
     });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      onError(data);
+      return;
+    }
+
+    onSuccess(data);
+  };
 
   const getCurrentScreen = (screenId) => {
     const GasTransmissionScreens = arrayToObjectByKey(screensInfo, `id`);
