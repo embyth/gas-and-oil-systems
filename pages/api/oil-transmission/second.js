@@ -8,10 +8,10 @@ async function handler(req, res) {
     return;
   }
 
-  const { body: cleintData } = req;
+  const { body: clientData } = req;
 
   try {
-    const results = secondCalculation(cleintData);
+    const results = secondCalculation(clientData);
 
     res.status(201).json(results);
   } catch (error) {

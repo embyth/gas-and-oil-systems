@@ -271,14 +271,8 @@ export const secondCalculation = (clientData) => {
     pressureMinLimits,
     pressureMaxLimits,
   } = adaptedData.stationsData;
-  const {
-    density,
-    stations: stationsData,
-    diameterCI,
-    viscosity,
-  } = adaptedData.results;
-
-  const stations = stationsData.length - 1;
+  const { density, stationsAmount, diameterCI, viscosity } =
+    adaptedData.results;
 
   const results = { stations: {} };
 
@@ -296,7 +290,7 @@ export const secondCalculation = (clientData) => {
       throw new Error(`Розрахунок увійшов у нескінченний цикл!`);
     }
 
-    for (let station = 0; station < stations; station += 1) {
+    for (let station = 0; station < stationsAmount; station += 1) {
       const stationResults = {};
 
       const maxAllowablePressure = formulas.getAllowablePressure(

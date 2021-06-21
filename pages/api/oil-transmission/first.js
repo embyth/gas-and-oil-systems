@@ -10,10 +10,10 @@ async function handler(req, res) {
     return;
   }
 
-  const { body: cleintData } = req;
+  const { body: clientData } = req;
 
   try {
-    const results = firstCalculation(cleintData);
+    const results = firstCalculation(clientData);
 
     // Создаем массив из количества НПС и заполняем их уникальными id
     const stations = new Array(results.stations + 1).fill(null).map(() => ({
@@ -25,7 +25,13 @@ async function handler(req, res) {
       },
     }));
 
-    const updatedResults = { ...results, stations };
+    const updatedResults = {
+      firstCalcResults: {
+        ...results,
+        stationsAmount: stations.length - 1,
+      },
+      stationsProps: stations,
+    };
     res.status(201).json(updatedResults);
   } catch (error) {
     res.status(501).json({
