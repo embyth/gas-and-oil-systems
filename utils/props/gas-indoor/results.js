@@ -1,0 +1,102 @@
+export const GAS_INDOOR_RESULT_FIELDS = {
+  RESULTS_HEADING: `Результати гідравлічного розрахунку будинкової мережі`,
+  RESULTS_HEAD: [
+    {
+      label: `Параметр`,
+      id: `parameter`,
+    },
+    {
+      label: `Позначення`,
+      id: `marking`,
+    },
+    {
+      label: `Значення`,
+      id: `value`,
+    },
+    {
+      label: `Розмірність`,
+      id: `dimension`,
+    },
+  ],
+  RESULTS: [
+    {
+      isFullRow: false,
+      type: `main`,
+      id: `velocity`,
+      parameter: `Уточнена швидкість газу в системі`,
+      marking: `W`,
+      dimension: `м/с`,
+    },
+    {
+      isFullRow: false,
+      type: `main`,
+      id: `sumPressureLoss`,
+      parameter: `Сумарна втрата тиску в системі`,
+      marking: `ΔР<sub>заг</sub>`,
+      dimension: `Па`,
+    },
+    {
+      isFullRow: false,
+      type: `segment`,
+      id: `segments-list`,
+      data: [
+        {
+          isFullRow: false,
+          type: `segment`,
+          id: `length`,
+          parameter: `Довжина ділянки`,
+          marking: `l`,
+          dimension: `м`,
+        },
+        {
+          isFullRow: false,
+          type: `segment`,
+          id: `consumption`,
+          parameter: `Розрахункова витрата газу на ділянці`,
+          marking: `Q`,
+          dimension: `м<sup>3</sup>/год`,
+        },
+        {
+          isFullRow: false,
+          type: `segment`,
+          id: `diameter`,
+          parameter: `Діаметр ділянки`,
+          marking: `D×δ`,
+          dimension: `мм`,
+        },
+        {
+          isFullRow: false,
+          type: `segment`,
+          id: `pressureLoss`,
+          parameter: `Втрати тиску від тертя у місцевих опорах`,
+          marking: `ΔP`,
+          dimension: `Па`,
+        },
+        {
+          isFullRow: false,
+          type: `segment`,
+          id: `pressureDrop`,
+          parameter: `Гідростатичний перепад тиску`,
+          marking: `ΔP<sub>гс</sub>`,
+          dimension: `Па`,
+        },
+        {
+          isFullRow: false,
+          type: `segment`,
+          id: `totalPressureDrop`,
+          parameter: `Загальний перепад тиску`,
+          marking: `ΔP<sub>заг</sub>`,
+          dimension: `Па`,
+        },
+        {
+          isFullRow: false,
+          type: `segment`,
+          id: `endingPressure`,
+          parameter: `Кінцевий надлишковий тиск на ділянці`,
+          marking: `P<sub>к</sub>`,
+          dimension: `Па`,
+        },
+      ],
+    },
+  ],
+};

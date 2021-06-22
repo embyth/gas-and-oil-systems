@@ -15,6 +15,9 @@ import { GAS_TRANSMISSION_MODAL_FIELDS } from "./gas-transmission/modal";
 import { GAS_TRANSMISSION_RESULT_FIELDS } from "./gas-transmission/results";
 
 import { GAS_INDOOR_INTRO_DATA, GAS_INDOOR_SCREENS } from "./gas-indoor/info";
+import { GAS_INDOOR_INPUT_FIELDS } from "./gas-indoor/income";
+import { GAS_INDOOR_SEGMENT_FIELDS } from "./gas-indoor/segments";
+import { GAS_INDOOR_RESULT_FIELDS } from "./gas-indoor/results";
 
 import {
   GAS_NETWORK_INTRO_DATA,
@@ -50,6 +53,9 @@ export const getGasIndoorProps = () => ({
   currentCalculation: AvailableCalculation.GAS_INDOOR,
   screensInfo: GAS_INDOOR_SCREENS,
   introInfo: GAS_INDOOR_INTRO_DATA,
+  incomeInputFields: GAS_INDOOR_INPUT_FIELDS,
+  segmentFields: GAS_INDOOR_SEGMENT_FIELDS,
+  resultFields: GAS_INDOOR_RESULT_FIELDS,
 });
 
 export const getGasNetworkProps = () => ({
