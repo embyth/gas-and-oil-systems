@@ -7,6 +7,7 @@ export const OIL_TRANSMISSION_SCREENS = [
   {
     id: "INCOME_DATA",
     label: "Вихідні дані",
+    labelCropped: "Дані",
     isDisabled: false,
   },
   {

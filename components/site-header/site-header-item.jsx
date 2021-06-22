@@ -2,8 +2,12 @@ import { useContext } from "react";
 
 import ScreenContext from "../../store/screen-context";
 
+import useWindowSize from "../../hooks/useWindowSize";
+
 const SiteHeaderItem = ({ screenInfo }) => {
   const { currentScreenId, changeScreen } = useContext(ScreenContext);
+
+  const { isTablet, isMobile } = useWindowSize();
 
   return (
     <li className="site-nav__item">
@@ -15,7 +19,11 @@ const SiteHeaderItem = ({ screenInfo }) => {
         disabled={screenInfo.isDisabled}
         onClick={() => changeScreen(screenInfo.id)}
       >
-        <span className="site-nav__button--text">{screenInfo.label}</span>
+        <span className="site-nav__button--text">
+          {isTablet || isMobile
+            ? screenInfo.labelCropped || screenInfo.label
+            : screenInfo.label}
+        </span>
       </button>
     </li>
   );

@@ -22,7 +22,11 @@ export const LocalStorage = {
     MODAL: `${AvailableCalculation.GAS_TRANSMISSION}-MODAL`,
     RESULTS: `${AvailableCalculation.GAS_TRANSMISSION}-RESULTS`,
   },
-  GAS_INDOOR: `GAS_INDOOR`,
+  GAS_INDOOR: {
+    INCOME: `${AvailableCalculation.GAS_INDOOR}-INCOME`,
+    SEGMENTS: `${AvailableCalculation.GAS_INDOOR}-SEGMENTS`,
+    RESULTS: `${AvailableCalculation.GAS_INDOOR}-RESULTS`,
+  },
   GAS_NETWORK: `GAS_NETWORK`,
 };
 
@@ -31,6 +35,12 @@ export const AvailableResultRowType = {
   EXTRA: `extra`,
   STATION: `station`,
   SEGMENT: `segment`,
+};
+
+export const MediaBreakpoint = {
+  MOBILE: 320,
+  TABLET: 768,
+  DESKTOP: 1280,
 };
 
 export const SHAKE_ANIMATION_TIMEOUT = 600;
