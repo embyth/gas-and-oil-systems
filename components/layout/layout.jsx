@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import useKeyboardEvent from "../../hooks/useKeyboardEvent";
+import useLockBodyScroll from "../../hooks/useLockBodyScroll";
 
 import SiteHeader from "../site-header/site-header";
 import SiteNavigation from "../site-navigation/site-navigation";
@@ -11,6 +12,8 @@ const Layout = ({ children, currentCalculation }) => {
   const router = useRouter();
 
   const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+
+  useLockBodyScroll(isNavigationOpen);
 
   useEffect(() => {
     const handleRouteChange = () => {
