@@ -1,19 +1,27 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useEffect } from "react";
 /**
- * useLockBodyScroll - locking body scroll on component mount
+ * useLockBodyScroll - locking body scroll on component mount or condition
+ * @param {boolean} shouldLock - should body be locked on passed condition
  */
-export default function useLockBodyScroll() {
-  useLayoutEffect(
+export default function useLockBodyScroll(shouldLock = true) {
+  const useIsomorphicLayoutEffect =
+    typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+  useIsomorphicLayoutEffect(
     () => {
       // get original value of body
       const originalStyle = window.getComputedStyle(document.body).overflow;
-      // prevent scrolling on mount
-      document.body.style.overflow = "hidden";
+
+      if (shouldLock) {
+        // prevent scrolling on mount
+        document.body.style.overflow = "hidden";
+      }
+
       // re-enable scrolling when component unmounts
       return () => {
         document.body.style.overflow = originalStyle;
       };
     },
-    [] // empty array to ensures effect is only run when mount and unmount
+    [shouldLock] // dependencies array to ensures effect is running on dependencie change
   );
 }
