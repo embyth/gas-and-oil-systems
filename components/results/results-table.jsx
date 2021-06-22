@@ -33,6 +33,7 @@ const ResultsTable = ({ resultFields }) => {
               isFullRow={isFullRow}
               type={type}
               stationData={data}
+              segmentData={data}
               results={results}
             />
           )

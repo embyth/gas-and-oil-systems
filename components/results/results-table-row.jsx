@@ -1,6 +1,7 @@
 import parse from "html-react-parser";
 
 import ResultsTableStationRows from "./results-table-station-rows";
+import ResultsTableSegmentRows from "./results-table-segment-rows";
 
 import { AvailableResultRowType } from "../../utils/const";
 
@@ -12,6 +13,7 @@ const ResultsTableRow = ({
   type,
   results,
   stationData,
+  segmentData,
   isFullRow,
 }) => {
   if (isFullRow) {
@@ -25,6 +27,11 @@ const ResultsTableRow = ({
   if (type === AvailableResultRowType.STATION) {
     return (
       <ResultsTableStationRows results={results} stationData={stationData} />
+    );
+  }
+  if (type === AvailableResultRowType.SEGMENT) {
+    return (
+      <ResultsTableSegmentRows results={results} segmentData={segmentData} />
     );
   }
 
