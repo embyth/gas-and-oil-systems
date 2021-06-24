@@ -27,10 +27,15 @@
     "eslint-plugin-react-hooks": "4.2.0"
   },
   "dependencies": {
+    "gray-matter": "4.0.3",
     "html-react-parser": "1.2.6",
     "next": "10.2.3",
     "react": "17.0.1",
     "react-dom": "17.0.1",
-    "react-notifications-component": "3.1.0"
+    "react-markdown": "6.0.2",
+    "react-notifications-component": "3.1.0",
+    "rehype-raw": "5.1.0",
+    "remark-gfm": "1.0.0",
+    "remark-slug": "6.0.0"
   }
 }
