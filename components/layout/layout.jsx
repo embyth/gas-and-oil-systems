@@ -1,5 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useRouter } from "next/router";
+
+import NavigationContext from "../../store/navigation-context";
 
 import useKeyboardEvent from "../../hooks/useKeyboardEvent";
 import useLockBodyScroll from "../../hooks/useLockBodyScroll";
@@ -11,48 +13,26 @@ import Container from "../container/container";
 const Layout = ({ children, currentCalculation }) => {
   const router = useRouter();
 
-  const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+  const { isNavigationOpen, closeNavigation } = useContext(NavigationContext);
 
   useLockBodyScroll(isNavigationOpen);
 
   useEffect(() => {
-    const handleRouteChange = () => {
-      setIsNavigationOpen(false);
-    };
-
-    router.events.on("routeChangeStart", handleRouteChange);
+    router.events.on("routeChangeStart", closeNavigation);
 
     // If the component is unmounted, unsubscribe
     // from the event with the `off` method:
     return () => {
-      router.events.off("routeChangeStart", handleRouteChange);
+      router.events.off("routeChangeStart", closeNavigation);
     };
   });
 
-  useKeyboardEvent(
-    `Escape`,
-    () => {
-      setIsNavigationOpen(false);
-    },
-    isNavigationOpen
-  );
-
-  const closeNavigationHandler = () => {
-    setIsNavigationOpen(false);
-  };
-
-  const openNavigationHandler = () => {
-    setIsNavigationOpen(true);
-  };
+  useKeyboardEvent(`Escape`, closeNavigation, isNavigationOpen);
 
   return (
     <>
-      <SiteHeader onNavigationOpenClick={openNavigationHandler} />
-      <SiteNavigation
-        currentCalculation={currentCalculation}
-        isNavigationOpen={isNavigationOpen}
-        onNavigationCloseClick={closeNavigationHandler}
-      />
+      <SiteHeader />
+      <SiteNavigation currentCalculation={currentCalculation} />
       <Container>{children}</Container>
     </>
   );

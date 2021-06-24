@@ -1,18 +1,20 @@
 import { useContext } from "react";
 
 import ScreenContext from "../../store/screen-context";
+import NavigationContext from "../../store/navigation-context";
 
 import SiteHeaderItem from "./site-header-item";
 
-const SiteHeader = ({ onNavigationOpenClick }) => {
+const SiteHeader = () => {
   const { screensState } = useContext(ScreenContext);
+  const { openNavigation } = useContext(NavigationContext);
 
   return (
     <header id="site-header" className="site-header">
       <button
         className="hamburger hamburger--squeeze"
         type="button"
-        onClick={onNavigationOpenClick}
+        onClick={openNavigation}
       >
         <span className="hamburger-box">
           <span className="hamburger-inner" />
