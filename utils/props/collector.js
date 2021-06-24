@@ -31,6 +31,11 @@ export const getIndexProps = () => ({
   screensInfo: [],
 });
 
+export const getDetailsProps = () => ({
+  currentCalculation: null,
+  screensInfo: [],
+});
+
 export const getOilTransmissionProps = () => ({
   currentCalculation: AvailableCalculation.OIL_TRANSMISSION,
   screensInfo: OIL_TRANSMISSION_SCREENS,
