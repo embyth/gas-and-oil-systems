@@ -239,7 +239,7 @@ export const GAS_NETWORK_PHYSICS_RESULT_FIELDS = {
       isFullRow: true,
       type: `main`,
       id: `title-5`,
-      parameter: `Укрупнений показник максимального теплового потоку на опалення 1 м2 загальної площі старих будівель:`,
+      parameter: `Укрупнений показник максимального теплового потоку на опалення 1 м<sup>2</sup> загальної площі старих будівель:`,
     },
     {
       isFullRow: false,
@@ -269,7 +269,7 @@ export const GAS_NETWORK_PHYSICS_RESULT_FIELDS = {
       isFullRow: true,
       type: `main`,
       id: `title-6`,
-      parameter: `Укрупнений показник максимального теплового потоку на опалення 1 м2 загальної площі нових будівель:`,
+      parameter: `Укрупнений показник максимального теплового потоку на опалення 1 м<sup>2</sup> загальної площі нових будівель:`,
     },
     {
       isFullRow: false,

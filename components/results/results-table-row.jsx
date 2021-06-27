@@ -19,7 +19,7 @@ const ResultsTableRow = ({
   if (isFullRow) {
     return (
       <tr className="data__table-row data__table-row--full">
-        <td colSpan="4">{parameter}</td>
+        <td colSpan="4">{parse(parameter)}</td>
       </tr>
     );
   }
