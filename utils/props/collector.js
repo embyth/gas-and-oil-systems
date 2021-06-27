@@ -23,6 +23,8 @@ import {
   GAS_NETWORK_INTRO_DATA,
   GAS_NETWORK_SCREENS,
 } from "./gas-network/info";
+import { GAS_NETWORK_INPUT_FIELDS } from "./gas-network/income";
+import { GAS_NETWORK_PHYSICS_RESULT_FIELDS } from "./gas-network/results-physics";
 
 import { AvailableCalculation } from "../const";
 
@@ -67,4 +69,6 @@ export const getGasNetworkProps = () => ({
   currentCalculation: AvailableCalculation.GAS_NETWORK,
   screensInfo: GAS_NETWORK_SCREENS,
   introInfo: GAS_NETWORK_INTRO_DATA,
+  incomeInputFields: GAS_NETWORK_INPUT_FIELDS,
+  physicsResults: GAS_NETWORK_PHYSICS_RESULT_FIELDS,
 });
