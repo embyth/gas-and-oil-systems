@@ -9,6 +9,7 @@ export const AvailableCalculation = {
   GAS_TRANSMISSION: "GAS_TRANSMISSION",
   GAS_INDOOR: "GAS_INDOOR",
   GAS_NETWORK: "GAS_NETWORK",
+  GAS_BRANCHES: "GAS_BRANCHES",
 };
 
 export const LocalStorage = {
@@ -27,7 +28,12 @@ export const LocalStorage = {
     SEGMENTS: `${AvailableCalculation.GAS_INDOOR}-SEGMENTS`,
     RESULTS: `${AvailableCalculation.GAS_INDOOR}-RESULTS`,
   },
-  GAS_NETWORK: `GAS_NETWORK`,
+  GAS_NETWORK: {
+    INCOME: `${AvailableCalculation.GAS_NETWORK}-INCOME`,
+    CONSUMPTIONS: `${AvailableCalculation.GAS_NETWORK}-CONSUMPTIONS`,
+    CIRCLES: `${AvailableCalculation.GAS_NETWORK}-CIRCLES`,
+    RESULTS: `${AvailableCalculation.GAS_NETWORK}-RESULTS`,
+  },
 };
 
 export const AvailableResultRowType = {

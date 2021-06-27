@@ -54,7 +54,26 @@ const SiteNavigation = ({ currentCalculation }) => {
                     : ``
                 }`}
               >
-                Розрахунок системи газопостачання сільського населеного пункту
+                Розрахунок системи газопостачання населеного пункту (кільцева)
+              </a>
+            </Link>
+          </li>
+          <li
+            className={`site-aside__links-item ${
+              currentCalculation === AvailableCalculation.GAS_BRANCHES
+                ? `site-aside__links-item--active`
+                : ``
+            }`}
+          >
+            <Link href="/gas-branches">
+              <a
+                className={`${
+                  currentCalculation === AvailableCalculation.GAS_BRANCHES
+                    ? `site-aside__links-item--disabled`
+                    : ``
+                }`}
+              >
+                Розрахунок газопостачання населеного пункту (розгалужена)
               </a>
             </Link>
           </li>
