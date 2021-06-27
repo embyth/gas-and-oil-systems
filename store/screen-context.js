@@ -38,20 +38,24 @@ export const ScreenContextProvider = ({ children, initialState }) => {
     dispatch({ type: "UPDATE_STATE", payload: updatedState });
   };
 
-  const changeScreenHandler = (screenId) => {
+  const unblockScreen = (screenId) => {
     const targetScreen = getScreenById(screenId);
 
     if (targetScreen.isDisabled) {
       updateScreensState(targetScreen);
     }
+  };
 
-    setCurrentScreenId(targetScreen.id);
+  const changeScreenHandler = (screenId) => {
+    unblockScreen(screenId);
+    setCurrentScreenId(screenId);
   };
 
   const context = {
     currentScreenId,
     screensState: state,
     changeScreen: changeScreenHandler,
+    unblockScreen,
   };
 
   return (
