@@ -1,3 +1,5 @@
+import { nanoid } from "nanoid";
+
 import { firstCalculation } from "../../../calculations/oil-transmission/algorithm";
 
 import { getRandomNumber } from "../../../utils/common";
@@ -17,7 +19,7 @@ async function handler(req, res) {
 
     // Создаем массив из количества НПС и заполняем их уникальными id
     const stations = new Array(results.stations + 1).fill(null).map(() => ({
-      uniqId: getRandomNumber(0, 999999999),
+      uniqId: nanoid(),
       placeholders: {
         length: getRandomNumber(70, 175),
         "geo-point": getRandomNumber(-50, 150),

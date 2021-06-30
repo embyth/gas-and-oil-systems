@@ -1,3 +1,5 @@
+import { nanoid } from "nanoid";
+
 import { RESIST_COEFS } from "../../../calculations/gas-indoor/const";
 
 import {
@@ -29,7 +31,7 @@ async function handler(req, res) {
 
     // Создаем массив из количества ділянок и заполняем их уникальными id и плейсхолдерами
     const segments = [...new Array(results.segmentsAmount)].map(() => ({
-      uniqId: getRandomNumber(0, 999999999),
+      uniqId: nanoid(),
       placeholders: {
         segment: `${getRandomNumber(1, 15)}-${getRandomNumber(1, 15)}`,
         consumption: getRandomFloatNumber(1, 15, 2),
