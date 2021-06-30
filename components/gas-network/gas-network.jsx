@@ -4,6 +4,7 @@ import ScreenContext from "../../store/screen-context";
 
 import Intro from "../intro/intro";
 import IncomeData from "../income-data/income-data";
+import IncomeConsumptions from "../income-consumptions/income-consumptions";
 import Results from "../results/results";
 
 import { arrayToObjectByKey } from "../../utils/common";
@@ -14,30 +15,52 @@ const GasNetwork = ({
   introInfo,
   incomeInputFields,
   physicsResults,
+  consumptionsInputFields,
+  // circlesInputFields,
+  // circlesResults,
 }) => {
   const { currentScreenId } = useContext(ScreenContext);
 
+  const sendIncomeData = async (inputData, onSuccess, onError) => {
+    const response = await fetch(`/api/gas-network/physical-properties`, {
+      method: `POST`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(inputData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      onError(data);
+      return;
+    }
+
+    onSuccess(data);
+  };
+
+  const sendConsumptionsData = async (inputData, onSuccess, onError) => {
+    const response = await fetch(`/api/gas-network/consumptions`, {
+      method: `POST`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(inputData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      onError(data);
+      return;
+    }
+
+    onSuccess(data);
+  };
+
   const getCurrentScreen = (screenId) => {
     const GasNetworkScreens = arrayToObjectByKey(screensInfo, `id`);
-
-    const sendIncomeData = async (inputData, onSuccess, onError) => {
-      const response = await fetch(`/api/gas-network/physical-properties`, {
-        method: `POST`,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(inputData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        onError(data);
-        return;
-      }
-
-      onSuccess(data);
-    };
 
     switch (screenId) {
       case GasNetworkScreens.INTRO.id:
@@ -65,6 +88,19 @@ const GasNetwork = ({
             nextScreenId={GasNetworkScreens.INCOME_CONSUMPTION.id}
           />
         );
+
+      case GasNetworkScreens.INCOME_CONSUMPTION.id:
+        return (
+          <IncomeConsumptions
+            consumptionsInputFields={consumptionsInputFields}
+            nextScreenId={GasNetworkScreens.INCOME_NETWORK.id}
+            currentCalculation={currentCalculation}
+            sendConsumptionsData={sendConsumptionsData}
+          />
+        );
+
+      case GasNetworkScreens.INCOME_NETWORK.id:
+        return <div>Income Network</div>;
 
       default:
         throw new Error(`Unexpected screen id! Value recieved: ${screenId}`);

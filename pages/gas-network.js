@@ -14,6 +14,9 @@ const GasNetworkPage = ({
   introInfo,
   incomeInputFields,
   physicsResults,
+  consumptionsInputFields,
+  circlesInputFields,
+  circlesResults,
 }) => (
   <>
     <Head>
@@ -28,6 +31,9 @@ const GasNetworkPage = ({
             introInfo={introInfo}
             incomeInputFields={incomeInputFields}
             physicsResults={physicsResults}
+            consumptionsInputFields={consumptionsInputFields}
+            circlesInputFields={circlesInputFields}
+            circlesResults={circlesResults}
           />
         </Layout>
       </CalculationDataContextProvider>
