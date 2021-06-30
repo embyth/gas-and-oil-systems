@@ -5,7 +5,10 @@ const calculationDataReducer = (state, action) => {
     case "SET_INCOME_DATA":
       return {
         ...state,
-        INCOME_DATA: action.payload,
+        INCOME_DATA: {
+          ...state.INCOME_DATA,
+          ...action.payload,
+        },
       };
 
     case "SET_STATIONS_DATA":
