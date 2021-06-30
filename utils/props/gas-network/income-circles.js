@@ -1,0 +1,1 @@
+export const GAS_NETWORK_CIRCLES_INPUT_FIELDS = {};

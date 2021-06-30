@@ -7,6 +7,11 @@ export const AnnualNormsOfHeatConsumptionFor = {
   PIGS: 4620,
 };
 
+export const PressureType = {
+  LOW: `LOW`,
+  MEDIUM: `MEDIUM`,
+};
+
 export const GAS_CONSUMPTION_FOR_HEATING_COEF = 1800;
 export const NORM_OF_TOTAL_LIVING_SPACE_PER_PERSON = 18;
 export const GAS_FURNACES_EFFICIENCY = 0.6;

@@ -22,12 +22,6 @@ export const GAS_NETWORK_SCREENS = [
     isDisabled: true,
   },
   {
-    id: "RESULTS_CONSUMPTION",
-    label: "Результати витрат",
-    labelCropped: "Рез. витрат",
-    isDisabled: true,
-  },
-  {
     id: "INCOME_NETWORK",
     label: "Кільця",
     isDisabled: true,
