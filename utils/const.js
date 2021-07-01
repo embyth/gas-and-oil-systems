@@ -31,6 +31,8 @@ export const LocalStorage = {
   GAS_NETWORK: {
     INCOME: `${AvailableCalculation.GAS_NETWORK}-INCOME`,
     CONSUMPTIONS: `${AvailableCalculation.GAS_NETWORK}-CONSUMPTIONS`,
+    CONSUMPTIONS_CONFIG: `${AvailableCalculation.GAS_NETWORK}-CONSUMPTIONS--CONFIG`,
+    CONSUMPTIONS_SEGMENTS: `${AvailableCalculation.GAS_NETWORK}-CONSUMPTIONS--SEGMENTS`,
     CIRCLES: `${AvailableCalculation.GAS_NETWORK}-CIRCLES`,
     RESULTS: `${AvailableCalculation.GAS_NETWORK}-RESULTS`,
   },
