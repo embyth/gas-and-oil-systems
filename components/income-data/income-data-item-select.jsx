@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
-
-import { LocalStorage } from "../../utils/const";
+import { useState } from "react";
 
 const IncomeDataItemSelect = ({
   label,
   data,
-  currentCalculation,
+  cachedValues,
   gpuRef,
   superchargerRef,
   updateInputValues,
   onModalOpen,
 }) => {
-  const [gpuValue, setGpuValue] = useState(``);
-  const [superchargerValue, setSuperchargerValue] = useState(``);
+  const [gpuValue, setGpuValue] = useState(cachedValues.gpu);
+  const [superchargerValue, setSuperchargerValue] = useState(
+    cachedValues.supercharger
+  );
   const compatibilityData = data.reduce(
     (acc, item) => ({
       ...acc,
@@ -25,17 +25,6 @@ const IncomeDataItemSelect = ({
   );
 
   const [gpuData, superchargerData] = data;
-
-  useEffect(() => {
-    const cachedValues = JSON.parse(
-      localStorage.getItem(LocalStorage[currentCalculation].INCOME)
-    );
-
-    if (cachedValues) {
-      setGpuValue(cachedValues.gpu);
-      setSuperchargerValue(cachedValues.supercharger);
-    }
-  }, [currentCalculation]);
 
   const gpuSelectChangeHandler = (evt) => {
     const { name, value } = evt.target;

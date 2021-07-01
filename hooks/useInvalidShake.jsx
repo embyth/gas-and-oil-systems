@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 /**
  * useInvalidShake - shake animation on element with invalid inputs
  * @param {number} delay - animation duration in ms
@@ -14,7 +14,7 @@ export default function useInvalidShake(delay) {
     setIsTriggered(true);
   };
 
-  const shake = () => {
+  const shake = useCallback(() => {
     if (!element) {
       return;
     }
@@ -24,7 +24,7 @@ export default function useInvalidShake(delay) {
       element.style.animation = ``;
       setIsTriggered(false);
     }, delay);
-  };
+  }, [delay, element]);
 
   useEffect(() => {
     if (isTriggered) {
@@ -32,7 +32,7 @@ export default function useInvalidShake(delay) {
     }
 
     return () => clearTimeout(shakeTimeoutRef.current);
-  }, [isTriggered]); // eslint-disable-line
+  }, [isTriggered, shake]);
 
   return { toggleShake };
 }

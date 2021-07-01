@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useState, useRef } from "react";
 
 import ScreenContext from "../../store/screen-context";
 import CalculationDataContext from "../../store/calculation-data-context";
@@ -6,6 +6,7 @@ import CalculationDataContext from "../../store/calculation-data-context";
 import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
 import useNotification from "../../hooks/useNotification";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 import IncomeSegmentsRow from "./income-segments-row";
 
@@ -38,23 +39,18 @@ const IncomeSegments = ({
       {}
     )
   );
-  const [inputValues, setInputValues] = useState(initialValues);
+  const [cachedValues, setCacheValues] = useLocalStorage(
+    LocalStorage[currentCalculation].SEGMENTS,
+    initialValues
+  );
+
+  const [inputValues, setInputValues] = useState(cachedValues);
   const [pipeType, setPipeType] = useState(PipeType.STEEL);
   const [isCalcButtonPressed, setIsCalcButtonPressed] = useState(false);
   const [isRequestSending, setIsRequestSending] = useState(false);
 
   const sectionRef = useRef();
   const inputElements = useRef([]);
-
-  useEffect(() => {
-    const cachedValues = JSON.parse(
-      localStorage.getItem(LocalStorage[currentCalculation].SEGMENTS)
-    );
-
-    if (cachedValues) {
-      setInputValues(cachedValues);
-    }
-  }, [segmentFields, currentCalculation]);
 
   const inputChangeHandler = (evt) => {
     const {
@@ -76,11 +72,7 @@ const IncomeSegments = ({
     }
 
     setInputValues(updatedValues);
-
-    localStorage.setItem(
-      LocalStorage[currentCalculation].SEGMENTS,
-      JSON.stringify(updatedValues)
-    );
+    setCacheValues(updatedValues);
   };
 
   const pipeTypeChangeHandler = (evt) => {

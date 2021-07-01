@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useState, useRef } from "react";
 
 import ScreenContext from "../../store/screen-context";
 import CalculationDataContext from "../../store/calculation-data-context";
@@ -6,6 +6,7 @@ import CalculationDataContext from "../../store/calculation-data-context";
 import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
 import useNotification from "../../hooks/useNotification";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 import IncomeStationsRow from "./income-stations-row";
 
@@ -41,19 +42,14 @@ const IncomeStations = ({
       {}
     )
   );
-  const [inputValues, setInputValues] = useState(initialValues);
+  const [cachedValues, setCacheValues] = useLocalStorage(
+    LocalStorage[currentCalculation].STATIONS,
+    initialValues
+  );
+
+  const [inputValues, setInputValues] = useState(cachedValues);
   const [isCalcButtonPressed, setIsCalcButtonPressed] = useState(false);
   const [isRequestSending, setIsRequestSending] = useState(false);
-
-  useEffect(() => {
-    const cachedValues = JSON.parse(
-      localStorage.getItem(LocalStorage[currentCalculation].STATIONS)
-    );
-
-    if (cachedValues) {
-      setInputValues(cachedValues);
-    }
-  }, [stationFields, currentCalculation]);
 
   const inputChangeHandler = (evt) => {
     const {
@@ -75,11 +71,7 @@ const IncomeStations = ({
     }
 
     setInputValues(updatedValues);
-
-    localStorage.setItem(
-      LocalStorage[currentCalculation].STATIONS,
-      JSON.stringify(updatedValues)
-    );
+    setCacheValues(updatedValues);
   };
 
   const calcButtonClickHandler = async () => {

@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import useLockBodyScroll from "../../hooks/useLockBodyScroll";
 import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 import IncomeDataItem from "./income-data-item";
 
@@ -33,21 +34,18 @@ const IncomeDataModal = ({
         : { ...acc, [item.id]: "" },
     {}
   );
-  const [modalValues, setModalValues] = useState(initialValues);
+  const [cachedValues, setCacheValues] = useLocalStorage(
+    LocalStorage[currentCalculation].MODAL,
+    initialValues
+  );
+
+  const [modalValues, setModalValues] = useState(cachedValues);
   const [isApplyButtonPressed, setIsApplyButtonPressed] = useState(false);
 
   const modalRef = useRef();
   const modalInputElements = useRef([]);
 
   useEffect(() => {
-    const cachedValues = JSON.parse(
-      localStorage.getItem(LocalStorage[currentCalculation].MODAL)
-    );
-
-    if (cachedValues) {
-      setModalValues({ ...modalValues, ...cachedValues });
-    }
-
     let timer;
     if (validateOnOpen) {
       timer = setTimeout(() => {
@@ -58,7 +56,7 @@ const IncomeDataModal = ({
     }
 
     return () => clearTimeout(timer);
-  }, []); // eslint-disable-line
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const inputChangeHandler = (evt) => {
     const { id, value } = evt.target;
@@ -75,11 +73,7 @@ const IncomeDataModal = ({
     setModalValues(updatedValues);
     updateModalValidationStatus(false);
     updateInputValues(id, value);
-
-    localStorage.setItem(
-      LocalStorage[currentCalculation].MODAL,
-      JSON.stringify(updatedValues)
-    );
+    setCacheValues(updatedValues);
   };
 
   const applyButtonClickHandler = () => {

@@ -1,4 +1,4 @@
-import { useContext, useState, useRef, useEffect } from "react";
+import { useContext, useState, useRef } from "react";
 
 import ScreenContext from "../../store/screen-context";
 import CalculationDataContext from "../../store/calculation-data-context";
@@ -7,6 +7,7 @@ import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
 import useKeyboardEvent from "../../hooks/useKeyboardEvent";
 import useNotification from "../../hooks/useNotification";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 import IncomeDataItem from "./income-data-item";
 import IncomeDataItemSelect from "./income-data-item-select";
@@ -45,7 +46,12 @@ const IncomeData = ({
         : { ...acc, [item.id]: "" },
     {}
   );
-  const [inputValues, setInputValues] = useState(initialValues);
+  const [cachedValues, setCacheValues] = useLocalStorage(
+    LocalStorage[currentCalculation].INCOME,
+    initialValues
+  );
+
+  const [inputValues, setInputValues] = useState(cachedValues);
   const [isNextButtonPressed, setIsNextButtonPressed] = useState(false);
   const [isRequestSending, setIsRequestSending] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,16 +60,6 @@ const IncomeData = ({
 
   const sectionRef = useRef();
   const inputElements = useRef([]);
-
-  useEffect(() => {
-    const cachedValues = JSON.parse(
-      localStorage.getItem(LocalStorage[currentCalculation].INCOME)
-    );
-
-    if (cachedValues) {
-      setInputValues(cachedValues);
-    }
-  }, [currentCalculation]);
 
   const modalCloseHandler = () => {
     setValidateModalOnOpen(false);
@@ -84,10 +80,7 @@ const IncomeData = ({
     };
 
     setInputValues(updatedValues);
-    localStorage.setItem(
-      LocalStorage[currentCalculation].INCOME,
-      JSON.stringify(updatedValues)
-    );
+    setCacheValues(updatedValues);
   };
 
   const inputChangeHandler = (evt) => {
@@ -166,7 +159,7 @@ const IncomeData = ({
                     key={item.id}
                     label={item.label}
                     data={item.data}
-                    currentCalculation={currentCalculation}
+                    cachedValues={cachedValues}
                     gpuRef={(element) =>
                       inputElements.current.splice(index, 1, element)
                     }

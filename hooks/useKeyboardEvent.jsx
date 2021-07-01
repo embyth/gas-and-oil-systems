@@ -18,5 +18,5 @@ export default function useKeyboardEvent(key, callback, condition = true) {
     }
 
     return () => document.removeEventListener("keydown", keydownHandler);
-  }, [condition]); // eslint-disable-line
+  }, [key, callback, condition]);
 }

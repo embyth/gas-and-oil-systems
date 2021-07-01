@@ -93,7 +93,7 @@ const IncomeConsumptionsSegments = ({
       setInputValues(updatedCache);
       setCacheValues(updatedCache);
     }
-  }, [segmentsConfig]); // eslint-disable-line
+  }, [segmentsConfig]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const inputChangeHandler = (evt) => {
     const {

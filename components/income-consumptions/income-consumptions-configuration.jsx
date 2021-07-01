@@ -74,7 +74,7 @@ const IncomeConsumptionsConfiguration = ({
     }
 
     inputElements.current = inputElements.current.slice(0, basisRoutesAmount);
-  }, [basisRoutesAmount]); // eslint-disable-line
+  }, [basisRoutesAmount]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const inputChangeHandler = (evt) => {
     const { id, value } = evt.target;
