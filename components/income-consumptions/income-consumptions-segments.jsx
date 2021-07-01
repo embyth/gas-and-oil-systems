@@ -5,6 +5,7 @@ import CalculationDataContext from "../../store/calculation-data-context";
 
 import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 import IncomeConsumptionsSegmentsRow from "./income-consumptions-segments-row";
 
@@ -12,6 +13,7 @@ import { SHAKE_ANIMATION_TIMEOUT, LocalStorage } from "../../utils/const";
 
 const IncomeConsumptionsSegments = ({
   currentCalculation,
+  totalLength,
   segmentFields,
   specificTravelGasConsumption,
   nextScreenId,
@@ -22,7 +24,7 @@ const IncomeConsumptionsSegments = ({
   const { isUserDataValid, checkInputValidity } = useFormValidation();
   const { toggleShake } = useInvalidShake(SHAKE_ANIMATION_TIMEOUT);
 
-  const { segmentsConfig, "total-length": totalLength } = getIncomeData();
+  const { segmentsConfig } = getIncomeData();
 
   const initialValues = segmentsConfig
     ? segmentsConfig.map((segment) =>
@@ -38,71 +40,60 @@ const IncomeConsumptionsSegments = ({
         )
       )
     : [];
-  const [inputValues, setInputValues] = useState(initialValues);
+  const [cachedValues, setCacheValues] = useLocalStorage(
+    LocalStorage[currentCalculation].CONSUMPTIONS_SEGMENTS,
+    initialValues
+  );
+
+  const [inputValues, setInputValues] = useState(cachedValues);
   const [isContinueButtonPressed, setIsContinueButtonPressed] = useState(false);
 
   const sectionRef = useRef();
   const inputElements = useRef([]);
 
-  useEffect(() => {
-    const cachedValues = JSON.parse(
-      localStorage.getItem(LocalStorage[currentCalculation].CONSUMPTIONS)
-    );
+  const calculateSegmentConsumptions = (segment) => {
+    const { length, "consumption-transit": consumptionTransit } = segment;
 
-    if (
-      cachedValues &&
-      cachedValues.segments &&
-      Object.keys(cachedValues.segments).length > 0
-    ) {
+    const pathConsumption = +(
+      (specificTravelGasConsumption / totalLength) *
+      +length
+    ).toFixed(2);
+
+    const calcedConsumption = +(
+      +consumptionTransit +
+      0.5 * pathConsumption
+    ).toFixed(2);
+
+    return {
+      ...segment,
+      "consumption-path": pathConsumption,
+      "consumption-calc": calcedConsumption,
+    };
+  };
+
+  useEffect(() => {
+    if (cachedValues && Object.keys(cachedValues).length > 0) {
       const updatedCache = segmentsConfig
         ? segmentsConfig.map((segment, index) =>
-            segmentFields.reduce(
-              (acc, item) => ({
-                ...acc,
-                [item.id]: cachedValues.segments[index]
-                  ? cachedValues.segments[index][item.id]
-                  : "",
-                uniqId: segment.uniqId,
-                basisRoutesProps: segment.basisRoutesProps,
-                placeholders: segment.placeholders,
-              }),
-              {}
-            )
+            cachedValues[index]
+              ? calculateSegmentConsumptions(cachedValues[index])
+              : segmentFields.reduce(
+                  (acc, item) => ({
+                    ...acc,
+                    [item.id]: "",
+                    uniqId: segment.uniqId,
+                    basisRoutesProps: segment.basisRoutesProps,
+                    placeholders: segment.placeholders,
+                  }),
+                  {}
+                )
           )
-        : cachedValues.segments;
+        : cachedValues;
 
       setInputValues(updatedCache);
+      setCacheValues(updatedCache);
     }
-  }, [currentCalculation, segmentsConfig, segmentFields]);
-
-  const calculateConsumptions = (segment, name, value) => {
-    const length = name === "length" ? +value : +inputValues[segment].length;
-    const pathConsumption =
-      name === "length"
-        ? +((specificTravelGasConsumption / +totalLength) * length).toFixed(2)
-        : +inputValues[segment]["consumption-path"];
-    const transitConsumption =
-      name === "consumption-transit"
-        ? +value
-        : +inputValues[segment]["consumption-transit"];
-
-    const updatedValue = {
-      ...inputValues[segment],
-      [name]: value,
-
-      "consumption-path":
-        name === "length"
-          ? pathConsumption
-          : inputValues[segment]["consumption-path"],
-
-      "consumption-calc":
-        name === "consumption-transit" || name === "length"
-          ? +(transitConsumption + 0.5 * pathConsumption).toFixed(2)
-          : inputValues[segment]["consumption-calc"],
-    };
-
-    return updatedValue;
-  };
+  }, [segmentsConfig]); // eslint-disable-line
 
   const inputChangeHandler = (evt) => {
     const {
@@ -111,11 +102,19 @@ const IncomeConsumptionsSegments = ({
       dataset: { segment },
     } = evt.target;
 
-    const updatedValue = calculateConsumptions(segment, name, value);
+    const updatedSegment = {
+      ...inputValues[segment],
+      [name]: value,
+    };
+
+    const calcedSegment =
+      name === "segment"
+        ? updatedSegment
+        : calculateSegmentConsumptions(updatedSegment);
 
     const updatedValues = [
       ...inputValues.slice(0, +segment),
-      updatedValue,
+      calcedSegment,
       ...inputValues.slice(+segment + 1),
     ];
 
@@ -124,15 +123,7 @@ const IncomeConsumptionsSegments = ({
     }
 
     setInputValues(updatedValues);
-
-    const cachedValues = JSON.parse(
-      localStorage.getItem(LocalStorage[currentCalculation].CONSUMPTIONS)
-    );
-
-    localStorage.setItem(
-      LocalStorage[currentCalculation].CONSUMPTIONS,
-      JSON.stringify({ ...cachedValues, segments: updatedValues })
-    );
+    setCacheValues(updatedValues);
   };
 
   const continueButtonClickHandler = () => {

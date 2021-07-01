@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useState, useRef } from "react";
 
 import CalculationDataContext from "../../store/calculation-data-context";
 
 import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
+import useLocalStorage from "../../hooks/useLocalStorage";
 
 import IncomeConsumptionsItem from "./income-consumptions-item";
 import IncomeConsumptionsConfiguration from "./income-consumptions-configuration";
@@ -20,6 +21,7 @@ const IncomeConsumptions = ({
   sendConsumptionsData,
 }) => {
   const { getResults, setIncomeData } = useContext(CalculationDataContext);
+  const consumptionByConsumers = getResults()["consumption-by-consumers"];
 
   const { isUserDataValid, checkInputValidity } = useFormValidation();
   const { toggleShake } = useInvalidShake(SHAKE_ANIMATION_TIMEOUT);
@@ -31,42 +33,57 @@ const IncomeConsumptions = ({
     }),
     {}
   );
-  const [inputValues, setInputValues] = useState(initialValues);
-  const [basisRoutesAmount, setBasisRoutesAmount] = useState(0);
+  const [cachedValues, setCacheValues] = useLocalStorage(
+    LocalStorage[currentCalculation].CONSUMPTIONS,
+    initialValues
+  );
 
-  const [pressureType, setPressureType] = useState(PressureType.LOW);
+  const [inputValues, setInputValues] = useState(cachedValues);
+  const [pressureType, setPressureType] = useState({
+    type:
+      (cachedValues &&
+        cachedValues.pressureType &&
+        cachedValues.pressureType.type) ||
+      PressureType.LOW,
+    value:
+      (cachedValues &&
+        cachedValues.pressureType &&
+        cachedValues.pressureType.value) ||
+      +consumptionByConsumers.qshngp,
+  });
 
   const [isNextButtonPressed, setIsNextButtonPressed] = useState(false);
-  const [isConfigurationShow, setIsConfigurationShow] = useState(false);
-  const [isSegmentsShow, setIsSegmentsShow] = useState(false);
+  const [isConfigurationShow, setIsConfigurationShow] = useState(
+    (cachedValues && cachedValues.isConfigurationOpen) || false
+  );
+  const [isSegmentsShow, setIsSegmentsShow] = useState(
+    (cachedValues && cachedValues.isSegmentsOpen) || false
+  );
 
   const sectionRef = useRef();
   const inputElements = useRef([]);
 
-  const consumptionByConsumers = getResults()["consumption-by-consumers"];
-  const specificTravelGasConsumption = useRef(+consumptionByConsumers.qshngp);
+  const configurationChangeHandler = (state) => {
+    setIsConfigurationShow(state);
 
-  useEffect(() => {
-    const cachedValues = JSON.parse(
-      localStorage.getItem(LocalStorage[currentCalculation].CONSUMPTIONS)
-    );
+    const layoutSetup = {
+      isConfigurationOpen: state,
+      isSegmentsOpen: isSegmentsShow,
+    };
 
-    if (
-      cachedValues &&
-      cachedValues.main &&
-      Object.keys(cachedValues.main).length > 0
-    ) {
-      setInputValues(cachedValues.main);
-      setBasisRoutesAmount(+cachedValues.main["basis-routes"]);
+    setCacheValues({ ...cachedValues, ...layoutSetup });
+  };
 
-      setPressureType(cachedValues.main.pressureType || PressureType.LOW);
-    }
+  const segmentsChangeHandler = (state) => {
+    setIsSegmentsShow(state);
 
-    if (cachedValues && cachedValues.layoutSetup) {
-      setIsConfigurationShow(cachedValues.layoutSetup.isConfigurationOpen);
-      setIsSegmentsShow(cachedValues.layoutSetup.isSegmentsOpen);
-    }
-  }, [consumptionsInputFields, currentCalculation]);
+    const layoutSetup = {
+      isConfigurationOpen: isConfigurationShow,
+      isSegmentsOpen: state,
+    };
+
+    setCacheValues({ ...cachedValues, ...layoutSetup });
+  };
 
   const inputChangeHandler = (evt) => {
     const { id, value } = evt.target;
@@ -80,72 +97,35 @@ const IncomeConsumptions = ({
       checkInputValidity(evt.target);
     }
 
+    configurationChangeHandler(false);
+    segmentsChangeHandler(false);
+
     setInputValues(updatedValues);
-
-    const cachedValues = JSON.parse(
-      localStorage.getItem(LocalStorage[currentCalculation].CONSUMPTIONS)
-    );
-
-    localStorage.setItem(
-      LocalStorage[currentCalculation].CONSUMPTIONS,
-      JSON.stringify({ ...cachedValues, main: { ...updatedValues } })
-    );
+    setCacheValues({ ...cachedValues, ...updatedValues });
   };
 
   const pressureTypeChangeHandler = (evt) => {
-    setPressureType(evt.target.value);
-    specificTravelGasConsumption.current =
-      evt.target.value === PressureType.LOW
+    const radioValue = evt.target.value;
+    const specificTravelGasConsumption =
+      radioValue === PressureType.LOW
         ? +consumptionByConsumers.qshngp
         : +consumptionByConsumers.qggod;
 
-    const cachedValues = JSON.parse(
-      localStorage.getItem(LocalStorage[currentCalculation].CONSUMPTIONS)
-    );
+    setPressureType({
+      type: radioValue,
+      value: specificTravelGasConsumption,
+    });
 
-    localStorage.setItem(
-      LocalStorage[currentCalculation].CONSUMPTIONS,
-      JSON.stringify({
-        ...cachedValues,
-        main: { ...cachedValues.main, pressureType: evt.target.value },
-      })
-    );
-  };
+    configurationChangeHandler(false);
+    segmentsChangeHandler(false);
 
-  const configurationChangeHandler = (state) => {
-    setIsConfigurationShow(state);
-
-    const layoutSetup = {
-      isConfigurationOpen: state,
-      isSegmentsOpen: isSegmentsShow,
-    };
-
-    const cachedValues = JSON.parse(
-      localStorage.getItem(LocalStorage[currentCalculation].CONSUMPTIONS)
-    );
-
-    localStorage.setItem(
-      LocalStorage[currentCalculation].CONSUMPTIONS,
-      JSON.stringify({ ...cachedValues, layoutSetup })
-    );
-  };
-
-  const segmentsChangeHandler = (state) => {
-    setIsSegmentsShow(state);
-
-    const layoutSetup = {
-      isConfigurationOpen: isConfigurationShow,
-      isSegmentsOpen: state,
-    };
-
-    const cachedValues = JSON.parse(
-      localStorage.getItem(LocalStorage[currentCalculation].CONSUMPTIONS)
-    );
-
-    localStorage.setItem(
-      LocalStorage[currentCalculation].CONSUMPTIONS,
-      JSON.stringify({ ...cachedValues, layoutSetup })
-    );
+    setCacheValues({
+      ...cachedValues,
+      pressureType: {
+        type: radioValue,
+        value: specificTravelGasConsumption,
+      },
+    });
   };
 
   const nextButtonClickHandler = () => {
@@ -155,8 +135,8 @@ const IncomeConsumptions = ({
 
     if (isUserDataValid(inputElements.current)) {
       setIncomeData(inputValues);
-      setBasisRoutesAmount(+inputValues["basis-routes"]);
       configurationChangeHandler(true);
+      segmentsChangeHandler(false);
     } else {
       configurationChangeHandler(false);
       segmentsChangeHandler(false);
@@ -202,7 +182,7 @@ const IncomeConsumptions = ({
                     className="data__input visually-hidden"
                     id="pressure-low"
                     value={PressureType.LOW}
-                    checked={pressureType === PressureType.LOW}
+                    checked={pressureType.type === PressureType.LOW}
                     name="pressure-type"
                     onChange={pressureTypeChangeHandler}
                   />
@@ -216,7 +196,7 @@ const IncomeConsumptions = ({
                     className="data__input visually-hidden"
                     id="pressure-medium"
                     value={PressureType.MEDIUM}
-                    checked={pressureType === PressureType.MEDIUM}
+                    checked={pressureType.type === PressureType.MEDIUM}
                     name="pressure-type"
                     onChange={pressureTypeChangeHandler}
                   />
@@ -239,7 +219,7 @@ const IncomeConsumptions = ({
             {isConfigurationShow && (
               <IncomeConsumptionsConfiguration
                 currentCalculation={currentCalculation}
-                basisRoutesAmount={basisRoutesAmount}
+                basisRoutesAmount={+inputValues["basis-routes"]}
                 configurationFields={consumptionsInputFields.configuration}
                 setIsNextSectionShow={segmentsChangeHandler}
                 sendConsumptionsData={sendConsumptionsData}
@@ -249,10 +229,9 @@ const IncomeConsumptions = ({
             {isConfigurationShow && isSegmentsShow && (
               <IncomeConsumptionsSegments
                 currentCalculation={currentCalculation}
+                totalLength={+inputValues["total-length"]}
                 segmentFields={consumptionsInputFields.segments}
-                specificTravelGasConsumption={
-                  specificTravelGasConsumption.current
-                }
+                specificTravelGasConsumption={pressureType.value}
                 nextScreenId={nextScreenId}
               />
             )}
