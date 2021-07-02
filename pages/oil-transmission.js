@@ -2,6 +2,7 @@ import Head from "next/head";
 
 import { ScreenContextProvider } from "../store/screen-context";
 import { CalculationDataContextProvider } from "../store/calculation-data-context";
+import { CalculationTypeContextProvider } from "../store/calculation-type-context";
 
 import Layout from "../components/layout/layout";
 import OilTransmission from "../components/oil-transmission/oil-transmission";
@@ -21,18 +22,20 @@ const OilTransmissionPage = ({
       <title>Технологічний розрахунок магістрального нафтопроводу</title>
     </Head>
     <ScreenContextProvider initialState={screensInfo}>
-      <CalculationDataContextProvider>
-        <Layout currentCalculation={currentCalculation}>
-          <OilTransmission
-            currentCalculation={currentCalculation}
-            screensInfo={screensInfo}
-            introInfo={introInfo}
-            incomeInputFields={incomeInputFields}
-            stationFields={stationFields}
-            resultFields={resultFields}
-          />
-        </Layout>
-      </CalculationDataContextProvider>
+      <CalculationTypeContextProvider calculation={currentCalculation}>
+        <CalculationDataContextProvider>
+          <Layout currentCalculation={currentCalculation}>
+            <OilTransmission
+              currentCalculation={currentCalculation}
+              screensInfo={screensInfo}
+              introInfo={introInfo}
+              incomeInputFields={incomeInputFields}
+              stationFields={stationFields}
+              resultFields={resultFields}
+            />
+          </Layout>
+        </CalculationDataContextProvider>
+      </CalculationTypeContextProvider>
     </ScreenContextProvider>
   </>
 );

@@ -2,6 +2,7 @@ import { useContext, useState, useRef } from "react";
 
 import ScreenContext from "../../store/screen-context";
 import CalculationDataContext from "../../store/calculation-data-context";
+import CalculationTypeContext from "../../store/calculation-type-context";
 
 import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
@@ -14,12 +15,8 @@ import { SHAKE_ANIMATION_TIMEOUT, LocalStorage } from "../../utils/const";
 
 import { PipeType } from "../../calculations/gas-indoor/const";
 
-const IncomeSegments = ({
-  segmentFields,
-  nextScreenId,
-  currentCalculation,
-  sendSegmentsData,
-}) => {
+const IncomeSegments = ({ segmentFields, nextScreenId, sendSegmentsData }) => {
+  const { currentCalculation } = useContext(CalculationTypeContext);
   const { changeScreen } = useContext(ScreenContext);
   const { getResults, setResults } = useContext(CalculationDataContext);
 

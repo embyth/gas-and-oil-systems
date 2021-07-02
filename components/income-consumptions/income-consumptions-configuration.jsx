@@ -1,6 +1,7 @@
 import { useContext, useState, useRef, useEffect } from "react";
 
 import CalculationDataContext from "../../store/calculation-data-context";
+import CalculationTypeContext from "../../store/calculation-type-context";
 
 import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
@@ -12,12 +13,12 @@ import IncomeConsumptionsItem from "./income-consumptions-item";
 import { SHAKE_ANIMATION_TIMEOUT, LocalStorage } from "../../utils/const";
 
 const IncomeConsumptionsConfiguration = ({
-  currentCalculation,
   basisRoutesAmount,
   configurationFields,
   setIsNextSectionShow,
   sendConsumptionsData,
 }) => {
+  const { currentCalculation } = useContext(CalculationTypeContext);
   const { setIncomeData } = useContext(CalculationDataContext);
 
   const { isUserDataValid, checkInputValidity } = useFormValidation();

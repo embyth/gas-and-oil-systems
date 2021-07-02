@@ -10,7 +10,6 @@ import Results from "../results/results";
 import { arrayToObjectByKey } from "../../utils/common";
 
 const GasIndoor = ({
-  currentCalculation,
   screensInfo,
   introInfo,
   incomeInputFields,
@@ -64,7 +63,6 @@ const GasIndoor = ({
           <IncomeData
             incomeInputFields={incomeInputFields}
             nextScreenId={GasIndoorScreens.SEGMENTS.id}
-            currentCalculation={currentCalculation}
             sendIncomeData={sendIncomeData}
           />
         );
@@ -74,7 +72,6 @@ const GasIndoor = ({
           <IncomeSegments
             segmentFields={segmentFields}
             nextScreenId={GasIndoorScreens.RESULTS.id}
-            currentCalculation={currentCalculation}
             sendSegmentsData={sendSegmentsData}
           />
         );

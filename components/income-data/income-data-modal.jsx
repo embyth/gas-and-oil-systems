@@ -1,4 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
+
+import CalculationTypeContext from "../../store/calculation-type-context";
 
 import useLockBodyScroll from "../../hooks/useLockBodyScroll";
 import useFormValidation from "../../hooks/useFormValidation";
@@ -12,12 +14,13 @@ import { SHAKE_ANIMATION_TIMEOUT, LocalStorage } from "../../utils/const";
 const IncomeDataModal = ({
   incomeModalFields,
   updateInputValues,
-  currentCalculation,
   updateModalValidationStatus,
   validateOnOpen,
   updateValidateOnOpen,
   onModalClose,
 }) => {
+  const { currentCalculation } = useContext(CalculationTypeContext);
+
   const { isUserDataValid, checkInputValidity } = useFormValidation();
   const { toggleShake } = useInvalidShake(SHAKE_ANIMATION_TIMEOUT);
   useLockBodyScroll();

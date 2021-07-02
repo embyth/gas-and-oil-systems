@@ -1,6 +1,7 @@
 import { useContext, useState, useRef } from "react";
 
 import CalculationDataContext from "../../store/calculation-data-context";
+import CalculationTypeContext from "../../store/calculation-type-context";
 
 import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
@@ -17,9 +18,9 @@ import { PressureType } from "../../calculations/gas-network/const";
 const IncomeConsumptions = ({
   consumptionsInputFields,
   nextScreenId,
-  currentCalculation,
   sendConsumptionsData,
 }) => {
+  const { currentCalculation } = useContext(CalculationTypeContext);
   const { getResults, setIncomeData } = useContext(CalculationDataContext);
   const consumptionByConsumers = getResults()["consumption-by-consumers"];
 
@@ -218,7 +219,6 @@ const IncomeConsumptions = ({
 
             {isConfigurationShow && (
               <IncomeConsumptionsConfiguration
-                currentCalculation={currentCalculation}
                 basisRoutesAmount={+inputValues["basis-routes"]}
                 configurationFields={consumptionsInputFields.configuration}
                 setIsNextSectionShow={segmentsChangeHandler}
@@ -228,7 +228,6 @@ const IncomeConsumptions = ({
 
             {isConfigurationShow && isSegmentsShow && (
               <IncomeConsumptionsSegments
-                currentCalculation={currentCalculation}
                 totalLength={+inputValues["total-length"]}
                 segmentFields={consumptionsInputFields.segments}
                 specificTravelGasConsumption={pressureType.value}

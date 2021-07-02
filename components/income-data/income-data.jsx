@@ -2,6 +2,7 @@ import { useContext, useState, useRef } from "react";
 
 import ScreenContext from "../../store/screen-context";
 import CalculationDataContext from "../../store/calculation-data-context";
+import CalculationTypeContext from "../../store/calculation-type-context";
 
 import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
@@ -23,9 +24,9 @@ const IncomeData = ({
   incomeInputFields,
   incomeModalFields,
   nextScreenId,
-  currentCalculation,
   sendIncomeData,
 }) => {
+  const { currentCalculation } = useContext(CalculationTypeContext);
   const { changeScreen } = useContext(ScreenContext);
   const { setIncomeData, setResults } = useContext(CalculationDataContext);
 
@@ -140,7 +141,6 @@ const IncomeData = ({
         <IncomeDataModal
           incomeModalFields={incomeModalFields}
           updateInputValues={updateInputValues}
-          currentCalculation={currentCalculation}
           updateModalValidationStatus={setIsModalValid}
           validateOnOpen={validateModalOnOpen}
           updateValidateOnOpen={setValidateModalOnOpen}

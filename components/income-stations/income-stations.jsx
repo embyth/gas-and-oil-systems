@@ -2,6 +2,7 @@ import { useContext, useState, useRef } from "react";
 
 import ScreenContext from "../../store/screen-context";
 import CalculationDataContext from "../../store/calculation-data-context";
+import CalculationTypeContext from "../../store/calculation-type-context";
 
 import useFormValidation from "../../hooks/useFormValidation";
 import useInvalidShake from "../../hooks/useInvalidShake";
@@ -12,12 +13,8 @@ import IncomeStationsRow from "./income-stations-row";
 
 import { SHAKE_ANIMATION_TIMEOUT, LocalStorage } from "../../utils/const";
 
-const IncomeStations = ({
-  stationFields,
-  nextScreenId,
-  currentCalculation,
-  sendStationsData,
-}) => {
+const IncomeStations = ({ stationFields, nextScreenId, sendStationsData }) => {
+  const { currentCalculation } = useContext(CalculationTypeContext);
   const { changeScreen } = useContext(ScreenContext);
   const { getResults, getIncomeData, setResults } = useContext(
     CalculationDataContext

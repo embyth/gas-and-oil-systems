@@ -9,7 +9,6 @@ import Results from "../results/results";
 import { arrayToObjectByKey } from "../../utils/common";
 
 const GasTransmission = ({
-  currentCalculation,
   screensInfo,
   introInfo,
   incomeInputFields,
@@ -55,7 +54,6 @@ const GasTransmission = ({
             incomeInputFields={incomeInputFields}
             incomeModalFields={incomeModalFields}
             nextScreenId={GasTransmissionScreens.RESULTS.id}
-            currentCalculation={currentCalculation}
             sendIncomeData={sendIncomeData}
           />
         );
