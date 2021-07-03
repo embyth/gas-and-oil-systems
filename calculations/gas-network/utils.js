@@ -1,3 +1,7 @@
+import { nanoid } from "nanoid";
+
+import { getRandomNumber, getRandomFloatNumber } from "../../utils/common";
+
 export const adaptIncomeDataToServer = (clientData) => ({
   rch4: +clientData.methane,
   rc2h6: +clientData.ethane,
@@ -26,3 +30,87 @@ export const adaptIncomeDataToServer = (clientData) => ({
   b2: +clientData["floor-3-4"] / 100,
   b3: +clientData["floor-high"] / 100,
 });
+
+export const getConsumptionsSegmentsConfig = (clientData) => {
+  const totalSegments = Object.values(clientData).reduce(
+    (prev, item) => prev + +item,
+    0
+  );
+
+  const routesBreakepoints = [0];
+  Object.values(clientData).reduce((prev, current) => {
+    routesBreakepoints.push(prev + +current);
+
+    return prev + +current;
+  }, 0);
+
+  return [...Array(totalSegments)].map(
+    (item, index) => ({
+      uniqId: nanoid(),
+      placeholders: {
+        segment: `${getRandomNumber(1, 20)}-${getRandomNumber(1, 20)}`,
+        length: getRandomNumber(90, 300),
+        "consumption-transit": getRandomFloatNumber(0, 100, 2),
+      },
+      basisRoutesProps: {
+        isStartOfBasisRoute: routesBreakepoints.includes(index),
+        basisRouteNumber:
+          routesBreakepoints.findIndex((breakpoint) => breakpoint === index) +
+          1,
+      },
+    }),
+    {}
+  );
+};
+
+export const getCirclesSegmentsConfig = (clientData) => {
+  const segments = Object.entries(clientData).reduce(
+    (acc, [key, value]) =>
+      key.includes("segments-amount-circle")
+        ? { ...acc, [key]: +value }
+        : { ...acc },
+    {}
+  );
+
+  const basisRoutes = Object.entries(clientData).reduce(
+    (acc, [key, value]) =>
+      key.includes("length-basis-route")
+        ? { ...acc, [key]: +value }
+        : { ...acc },
+    {}
+  );
+
+  const totalSegments = Object.values(segments).reduce(
+    (acc, value) => acc + value,
+    0
+  );
+
+  const circlesBreakpoints = [0];
+  Object.values(segments).reduce((prev, current) => {
+    circlesBreakpoints.push(prev + +current);
+
+    return prev + +current;
+  }, 0);
+
+  return [...Array(totalSegments)].map(
+    (item, index) => ({
+      uniqId: nanoid(),
+      placeholders: {
+        segment: `${getRandomNumber(1, 20)}-${getRandomNumber(1, 20)}`,
+        "consumption-calc": getRandomFloatNumber(-50, 100, 2),
+        length: getRandomNumber(90, 300),
+        "neighbor-circle-num": getRandomNumber(0, Object.keys(segments).length),
+        "basis-route-num": getRandomNumber(1, Object.keys(basisRoutes).length),
+      },
+      segmentProps: {
+        isStartOfCircle: circlesBreakpoints.includes(index),
+        circleNumber:
+          circlesBreakpoints.findIndex((breakpoint) => breakpoint === index) +
+          1,
+        circlesAmount: Object.keys(segments).length,
+        basisRoutesAmount: Object.keys(basisRoutes).length,
+      },
+    }),
+    {}
+  );
+};
