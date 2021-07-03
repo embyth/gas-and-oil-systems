@@ -188,7 +188,7 @@ const IncomeData = ({
                   />
                 )
               )}
-              <div className="data__item">
+              <div className="data__item data__item--button">
                 <button
                   className="button button--primary data__button data__button--next"
                   type="button"

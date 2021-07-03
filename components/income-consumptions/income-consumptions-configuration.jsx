@@ -16,7 +16,7 @@ const IncomeConsumptionsConfiguration = ({
   basisRoutesAmount,
   configurationFields,
   setIsNextSectionShow,
-  sendConsumptionsData,
+  sendSegmentsData,
 }) => {
   const { currentCalculation } = useContext(CalculationTypeContext);
   const { setIncomeData } = useContext(CalculationDataContext);
@@ -110,8 +110,8 @@ const IncomeConsumptionsConfiguration = ({
       setIsRequestSending(true);
       setIsNextSectionShow(false);
 
-      await sendConsumptionsData(
-        inputConfigValues,
+      await sendSegmentsData(
+        { ...inputConfigValues, type: `consumptions` },
         sendDataSuccessHandler,
         sendDataErrorHandler
       );
@@ -153,7 +153,7 @@ const IncomeConsumptionsConfiguration = ({
             />
           ))
         )}
-        <div className="data__item">
+        <div className="data__item data__item--button">
           <button
             className="button button--primary data__button data__button--next"
             type="button"

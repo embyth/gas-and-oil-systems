@@ -18,7 +18,7 @@ import { PressureType } from "../../calculations/gas-network/const";
 const IncomeConsumptions = ({
   consumptionsInputFields,
   nextScreenId,
-  sendConsumptionsData,
+  sendSegmentsData,
 }) => {
   const { currentCalculation } = useContext(CalculationTypeContext);
   const { getResults, setIncomeData } = useContext(CalculationDataContext);
@@ -222,7 +222,7 @@ const IncomeConsumptions = ({
                 basisRoutesAmount={+inputValues["basis-routes"]}
                 configurationFields={consumptionsInputFields.configuration}
                 setIsNextSectionShow={segmentsChangeHandler}
-                sendConsumptionsData={sendConsumptionsData}
+                sendSegmentsData={sendSegmentsData}
               />
             )}
 

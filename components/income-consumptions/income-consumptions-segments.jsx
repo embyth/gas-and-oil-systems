@@ -73,7 +73,7 @@ const IncomeConsumptionsSegments = ({
   };
 
   useEffect(() => {
-    if (cachedValues && Object.keys(cachedValues).length > 0) {
+    if (cachedValues && cachedValues.length > 0) {
       const updatedCache = segmentsConfig
         ? segmentsConfig.map((segment, index) =>
             cachedValues[index]
@@ -188,7 +188,7 @@ const IncomeConsumptionsSegments = ({
           </tbody>
         </table>
       </div>
-      <div className="data__item">
+      <div className="data__item data__item--button">
         <button
           className="button button--primary data__button data__button--continue"
           type="button"
