@@ -176,7 +176,7 @@ const IncomeConsumptions = ({
             </div>
             <div className="data__footer">
               <div className="data__footer-item">
-                <span className="data__legend">Тип газопроводів</span>
+                <span className="data__legend">Тиск газопроводів</span>
                 <div className="data__radio-wrapper">
                   <input
                     type="radio"

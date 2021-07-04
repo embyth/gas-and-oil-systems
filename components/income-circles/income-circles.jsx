@@ -1,4 +1,4 @@
-import { useContext, useState, useRef } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 
 import CalculationDataContext from "../../store/calculation-data-context";
 import CalculationTypeContext from "../../store/calculation-type-context";
@@ -54,6 +54,10 @@ const IncomeCircles = ({
 
   const sectionRef = useRef();
   const inputElements = useRef([]);
+
+  useEffect(() => {
+    setIncomeData({ networkConfig: inputValues });
+  }, [inputValues]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const configurationChangeHandler = (state) => {
     setIsConfigurationShow(state);
@@ -163,7 +167,7 @@ const IncomeCircles = ({
             </div>
             <div className="data__footer">
               <div className="data__footer-item">
-                <span className="data__legend">Тип газопроводів</span>
+                <span className="data__legend">Тиск газопроводів</span>
                 <div className="data__radio-wrapper">
                   <input
                     type="radio"

@@ -81,6 +81,7 @@ const IncomeCirclesConfiguration = ({
       };
 
       setInputConfigValues(slicedCache);
+      setIncomeData({ circlesConfig: slicedCache });
     }
 
     inputElements.current = inputElements.current.slice(

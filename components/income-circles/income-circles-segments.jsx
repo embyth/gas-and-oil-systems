@@ -12,6 +12,7 @@ import useLocalStorage from "../../hooks/useLocalStorage";
 import IncomeCirclesSegmentRow from "./income-circles-segment-row";
 
 import { SHAKE_ANIMATION_TIMEOUT, LocalStorage } from "../../utils/const";
+import { PipeType } from "../../calculations/gas-network/const";
 
 const IncomeCirclesSegments = ({
   segmentFields,
@@ -20,7 +21,7 @@ const IncomeCirclesSegments = ({
 }) => {
   const { currentCalculation } = useContext(CalculationTypeContext);
   const { changeScreen } = useContext(ScreenContext);
-  const { getIncomeData, setIncomeData, setResults } = useContext(
+  const { getIncomeData, setIncomeData, getResults, setResults } = useContext(
     CalculationDataContext
   );
 
@@ -50,6 +51,8 @@ const IncomeCirclesSegments = ({
   );
 
   const [inputValues, setInputValues] = useState(cachedValues);
+  const [pipeType, setPipeType] = useState(PipeType.STEEL);
+
   const [isContinueButtonPressed, setIsContinueButtonPressed] = useState(false);
   const [isRequestSending, setIsRequestSending] = useState(false);
 
@@ -106,6 +109,10 @@ const IncomeCirclesSegments = ({
     setCacheValues(updatedValues);
   };
 
+  const pipeTypeChangeHandler = (evt) => {
+    setPipeType(evt.target.value);
+  };
+
   const sendDataSuccessHandler = (data) => {
     setResults(data);
   };
@@ -114,17 +121,33 @@ const IncomeCirclesSegments = ({
     spawnErrorNotification(data.message || "Невідома помилка!");
   };
 
-  const continueButtonClickHandler = async () => {
+  const calcButtonClickHandler = async () => {
     if (!isContinueButtonPressed) {
       setIsContinueButtonPressed(true);
     }
 
     if (isUserDataValid(inputElements.current)) {
+      const { "physical-properties": physicsProps } = getResults();
+      const { networkConfig, circlesConfig } = getIncomeData();
+
+      const incomeFormation = {
+        physicsProps: {
+          normalDensity: physicsProps.RoN,
+          kinematicViscosity: physicsProps.nyu,
+        },
+        networkConfig: {
+          ...networkConfig,
+          pipeType,
+        },
+        circlesConfig,
+        circlesSegments: inputValues,
+      };
+
       setIncomeData({ circlesSegments: inputValues });
       setIsRequestSending(true);
 
       await sendCirclesData(
-        inputValues,
+        incomeFormation,
         sendDataSuccessHandler,
         sendDataErrorHandler
       );
@@ -184,15 +207,48 @@ const IncomeCirclesSegments = ({
           </tbody>
         </table>
       </div>
-      <div className="data__item data__item--button">
-        <button
-          className="button button--primary data__button data__button--continue"
-          type="button"
-          disabled={isRequestSending}
-          onClick={continueButtonClickHandler}
-        >
-          Розрахувати
-        </button>
+      <div className="data__footer">
+        <div className="data__footer-item">
+          <span className="data__legend">Тип газопроводів</span>
+          <div className="data__radio-wrapper">
+            <input
+              type="radio"
+              className="data__input data__input--pipe-steel visually-hidden"
+              id="pipe-steel"
+              value={PipeType.STEEL}
+              checked={pipeType === PipeType.STEEL}
+              name="pipe-type"
+              onChange={pipeTypeChangeHandler}
+            />
+            <label htmlFor="pipe-steel" className="data__label">
+              Сталеві
+            </label>
+          </div>
+          <div className="data__radio-wrapper">
+            <input
+              type="radio"
+              className="data__input data__input--pipe-poly visually-hidden"
+              id="pipe-poly"
+              value={PipeType.POLY}
+              checked={pipeType === PipeType.POLY}
+              name="pipe-type"
+              onChange={pipeTypeChangeHandler}
+            />
+            <label htmlFor="pipe-poly" className="data__label">
+              Поліетиленові
+            </label>
+          </div>
+        </div>
+        <div className="data__footer-item">
+          <button
+            className="button button--primary data__button data__button--calc"
+            type="button"
+            disabled={isRequestSending}
+            onClick={calcButtonClickHandler}
+          >
+            Розрахувати
+          </button>
+        </div>
       </div>
     </>
   );
