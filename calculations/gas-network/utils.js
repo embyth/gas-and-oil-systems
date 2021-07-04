@@ -31,6 +31,48 @@ export const adaptIncomeDataToServer = (clientData) => ({
   b3: +clientData["floor-high"] / 100,
 });
 
+export const adaptCirclesDataToServer = (clientData) => ({
+  physicsProps: {
+    normalDensity: +clientData.physicsProps.normalDensity,
+    kinematicViscosity: +clientData.physicsProps.kinematicViscosity * 10 ** -6,
+  },
+  networkConfig: {
+    pipeType: clientData.networkConfig.pipeType,
+    pressureType: clientData.networkConfig.pressureType,
+    pressureStart:
+      clientData.networkConfig.pressureType === "LOW"
+        ? +clientData.networkConfig["pressure-start-low"]
+        : +clientData.networkConfig["pressure-start-pressure-start-medium"],
+    pressureDrop:
+      clientData.networkConfig.pressureType === "LOW" &&
+      +clientData.networkConfig["pressure-drop"],
+    pressureEnd:
+      clientData.networkConfig.pressureType === "MEDIUM" &&
+      +clientData.networkConfig["pressure-end"],
+    kirghofScale: +clientData.networkConfig["kirghof-scale"],
+    highloadCoef: +clientData.networkConfig["highload-coef"],
+    circlesAmount: +clientData.networkConfig["circles-amount"],
+    basisRoutesAmount: +clientData.networkConfig["basis-routes"],
+  },
+  circlesConfig: {
+    segmentsInCircle: Object.entries(clientData.circlesConfig)
+      .filter(([key]) => key.includes("segments-amount-circle"))
+      .map(([, value]) => +value),
+    basisRoutesLengths: Object.entries(clientData.circlesConfig)
+      .filter(([key]) => key.includes("length-basis-route"))
+      .map(([, value]) => +value),
+  },
+  circlesSegments: clientData.circlesSegments.map((item) => ({
+    segmentProps: item.segmentProps,
+    segment: item.segment,
+    uniqId: item.uniqId,
+    calcConsumption: +item["consumption-calc"],
+    neighborCircleNum: +item["neighbor-circle-num"],
+    basisRouteNum: +item["basis-route-num"],
+    length: +item.length,
+  })),
+});
+
 export const getConsumptionsSegmentsConfig = (clientData) => {
   const totalSegments = Object.values(clientData).reduce(
     (prev, item) => prev + +item,
