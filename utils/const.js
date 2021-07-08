@@ -45,6 +45,7 @@ export const AvailableResultRowType = {
   EXTRA: `extra`,
   STATION: `station`,
   SEGMENT: `segment`,
+  CIRCLE: `circle`,
 };
 
 export const MediaBreakpoint = {
