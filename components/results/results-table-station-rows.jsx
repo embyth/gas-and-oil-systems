@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import parse from "html-react-parser";
 
-const ResultsTableStationRows = ({ results, stationData }) => {
+const ResultsTableStationRows = ({ results, stationFields }) => {
   const getStationNames = (stationIndex) => {
     if (stationIndex === 0) {
       return [`ГНПС-1`, `НПС-2`];
@@ -23,7 +23,7 @@ const ResultsTableStationRows = ({ results, stationData }) => {
           <td colSpan="4">{`${stationFrom} - ${stationTo}`}</td>
         </tr>
 
-        {stationData.map(
+        {stationFields.map(
           ({
             id: valueId,
             parameter: stationParameter,

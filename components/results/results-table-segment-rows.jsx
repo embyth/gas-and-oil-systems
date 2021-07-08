@@ -1,14 +1,14 @@
 import { Fragment } from "react";
 import parse from "html-react-parser";
 
-const ResultsTableSegmentRows = ({ results, segmentData }) =>
-  results.segmentsResult.map((segment) => (
+const ResultsTableSegmentRows = ({ segments, segmentFields }) =>
+  segments.map((segment) => (
     <Fragment key={segment.uniqId}>
       <tr className="data__table-row data__table-row--segment">
         <td colSpan="4">Ділянка {segment.name}</td>
       </tr>
 
-      {segmentData.map(
+      {segmentFields.map(
         ({
           id: valueId,
           parameter: segmentParameter,

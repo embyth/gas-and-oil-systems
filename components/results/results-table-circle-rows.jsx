@@ -3,11 +3,11 @@ import parse from "html-react-parser";
 
 import ResultsTableSegmentRows from "./results-table-segment-rows";
 
-const ResultsTableCircleRows = ({ results, circleData }) => {
+const ResultsTableCircleRows = ({ results, circleFields }) => {
   const circlesFieldsByPressure =
     results.pressureType === `LOW`
-      ? circleData.lowPressure
-      : circleData.mediumPressure;
+      ? circleFields.lowPressure
+      : circleFields.mediumPressure;
 
   return results.circles.map((circle, index) => (
     <Fragment key={circle.uniqId}>
@@ -39,7 +39,7 @@ const ResultsTableCircleRows = ({ results, circleData }) => {
             <ResultsTableSegmentRows
               key={`${id}-${circle.uniqId}`}
               segments={circle.segments}
-              segmentData={data}
+              segmentFields={data}
             />
           )
       )}

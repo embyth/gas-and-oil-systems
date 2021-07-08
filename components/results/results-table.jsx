@@ -32,8 +32,7 @@ const ResultsTable = ({ resultFields }) => {
               dimension={dimension}
               isFullRow={isFullRow}
               type={type}
-              stationData={data}
-              segmentData={data}
+              typeData={data}
               results={results}
             />
           )
