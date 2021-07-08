@@ -13,7 +13,7 @@ import IncomeCirclesSegments from "./income-circles-segments";
 
 import { SHAKE_ANIMATION_TIMEOUT, LocalStorage } from "../../utils/const";
 
-import { PressureType } from "../../calculations/gas-network/const";
+import { PipeType, PressureType } from "../../calculations/gas-network/const";
 
 const IncomeCircles = ({
   circlesInputFields,
@@ -43,6 +43,9 @@ const IncomeCircles = ({
   const [pressureType, setPressureType] = useState(
     (cachedValues && cachedValues.pressureType) || PressureType.LOW
   );
+  const [pipeType, setPipeType] = useState(
+    (cachedValues && cachedValues.pipeType) || PipeType.STEEL
+  );
 
   const [isNextButtonPressed, setIsNextButtonPressed] = useState(false);
   const [isConfigurationShow, setIsConfigurationShow] = useState(
@@ -56,7 +59,9 @@ const IncomeCircles = ({
   const inputElements = useRef([]);
 
   useEffect(() => {
-    setIncomeData({ networkConfig: inputValues });
+    setIncomeData({
+      networkConfig: { ...inputValues, pressureType, pipeType },
+    });
   }, [inputValues]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const configurationChangeHandler = (state) => {
@@ -108,9 +113,22 @@ const IncomeCircles = ({
     configurationChangeHandler(false);
     segmentsChangeHandler(false);
 
+    setInputValues({ ...inputValues, pressureType: radioValue });
     setCacheValues({
       ...cachedValues,
       pressureType: radioValue,
+    });
+  };
+
+  const pipeTypeChangeHandler = (evt) => {
+    const radioValue = evt.target.value;
+
+    setPipeType(radioValue);
+
+    setInputValues({ ...inputValues, pipeType: radioValue });
+    setCacheValues({
+      ...cachedValues,
+      pipeType: radioValue,
     });
   };
 
@@ -222,6 +240,8 @@ const IncomeCircles = ({
               <IncomeCirclesSegments
                 segmentFields={circlesInputFields.segments}
                 nextScreenId={nextScreenId}
+                pipeType={pipeType}
+                onPipeTypeChange={pipeTypeChangeHandler}
                 sendCirclesData={sendCirclesData}
               />
             )}

@@ -17,6 +17,8 @@ import { PipeType } from "../../calculations/gas-network/const";
 const IncomeCirclesSegments = ({
   segmentFields,
   nextScreenId,
+  pipeType,
+  onPipeTypeChange,
   sendCirclesData,
 }) => {
   const { currentCalculation } = useContext(CalculationTypeContext);
@@ -51,7 +53,6 @@ const IncomeCirclesSegments = ({
   );
 
   const [inputValues, setInputValues] = useState(cachedValues);
-  const [pipeType, setPipeType] = useState(PipeType.STEEL);
 
   const [isContinueButtonPressed, setIsContinueButtonPressed] = useState(false);
   const [isRequestSending, setIsRequestSending] = useState(false);
@@ -79,9 +80,15 @@ const IncomeCirclesSegments = ({
         : cachedValues;
 
       setInputValues(updatedCache);
-      setCacheValues(updatedCache);
     }
   }, [circleSegmentsConfig]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    inputElements.current = inputElements.current.slice(
+      0,
+      inputValues.length * 5
+    );
+  }, [inputValues]);
 
   const inputChangeHandler = (evt) => {
     const {
@@ -109,10 +116,6 @@ const IncomeCirclesSegments = ({
     setCacheValues(updatedValues);
   };
 
-  const pipeTypeChangeHandler = (evt) => {
-    setPipeType(evt.target.value);
-  };
-
   const sendDataSuccessHandler = (data) => {
     setResults(data);
   };
@@ -135,10 +138,7 @@ const IncomeCirclesSegments = ({
           normalDensity: physicsProps.RoN,
           kinematicViscosity: physicsProps.nyu,
         },
-        networkConfig: {
-          ...networkConfig,
-          pipeType,
-        },
+        networkConfig,
         circlesConfig,
         circlesSegments: inputValues,
       };
@@ -218,7 +218,7 @@ const IncomeCirclesSegments = ({
               value={PipeType.STEEL}
               checked={pipeType === PipeType.STEEL}
               name="pipe-type"
-              onChange={pipeTypeChangeHandler}
+              onChange={onPipeTypeChange}
             />
             <label htmlFor="pipe-steel" className="data__label">
               Сталеві
@@ -232,7 +232,7 @@ const IncomeCirclesSegments = ({
               value={PipeType.POLY}
               checked={pipeType === PipeType.POLY}
               name="pipe-type"
-              onChange={pipeTypeChangeHandler}
+              onChange={onPipeTypeChange}
             />
             <label htmlFor="pipe-poly" className="data__label">
               Поліетиленові

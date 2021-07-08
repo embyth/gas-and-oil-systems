@@ -81,7 +81,6 @@ const IncomeCirclesConfiguration = ({
       };
 
       setInputConfigValues(slicedCache);
-      setIncomeData({ circlesConfig: slicedCache });
     }
 
     inputElements.current = inputElements.current.slice(
@@ -89,6 +88,12 @@ const IncomeCirclesConfiguration = ({
       circlesAmount + basisRoutesAmount
     );
   }, [basisRoutesAmount, circlesAmount]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setIncomeData({
+      circlesConfig: { ...inputConfigValues },
+    });
+  }, [inputConfigValues]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const createInputFields = () => {
     const circleSegmentsAmount = [...Array(circlesAmount)].map(
