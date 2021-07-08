@@ -309,3 +309,175 @@ export const getMaximumHourlyGasConsumptionGRP = (
   maximumVolumeOfGas,
   maxHourlyGasConsumptionForVentilation
 ) => maximumVolumeOfGas + maxHourlyGasConsumptionForVentilation;
+
+// Cередній гідравлічний нахил для мережі низького тиску
+export const getAverageHydraulicInclination = (
+  highloadCoef,
+  pressureDrop,
+  segmentLength
+) => (highloadCoef * pressureDrop) / (1.1 * segmentLength);
+
+// Cередній гідравлічний нахил для мережі середнього тиску
+export const getAverageHydraulicInclinationMedium = (
+  highloadCoef,
+  pressureStart,
+  pressureEnd,
+  segmentLength
+) =>
+  highloadCoef *
+  ((pressureStart ** 2 - pressureEnd ** 2) / (1.1 * segmentLength));
+
+// Фактичне значення енергетичного параметру
+export const getActualEnergyParameter = (
+  pipeRoughness,
+  segmentDiameter,
+  segmentConsumption,
+  kinematicViscosity,
+  normalDensity
+) =>
+  (1.54 *
+    10 ** -5 *
+    (pipeRoughness / segmentDiameter +
+      (1922 * (kinematicViscosity * segmentDiameter)) /
+        Math.abs(segmentConsumption)) **
+      0.25 *
+    (segmentConsumption ** 2 * normalDensity)) /
+  segmentDiameter ** 5;
+
+// Число Рейнольдса
+export const getReynoldsNumber = (
+  segmentConsumption,
+  segmentDiameter,
+  kinematicViscosity
+) =>
+  0.0354 *
+  (Math.abs(segmentConsumption) / (segmentDiameter * kinematicViscosity));
+
+// Гідравлічний нахил для Рейнольдса > 4000
+export const getHydraulicTilt4000 = (
+  pipeRoughness,
+  segmentDiameter,
+  segmentConsumption,
+  kinematicViscosity,
+  normalDensity
+) =>
+  (75.9 *
+    (pipeRoughness / segmentDiameter +
+      (1922 * (kinematicViscosity * segmentDiameter)) /
+        Math.abs(segmentConsumption)) **
+      0.25 *
+    (segmentConsumption ** 2 * normalDensity)) /
+  segmentDiameter ** 5;
+
+// Гідравлічний нахил для Рейнольдса > 2000
+export const getHydraulicTilt2000 = (
+  segmentDiameter,
+  segmentConsumption,
+  kinematicViscosity,
+  normalDensity
+) =>
+  0.568 *
+  ((Math.abs(segmentConsumption) ** 2.333 * normalDensity) /
+    (segmentDiameter ** 5.333 * kinematicViscosity ** 0.333));
+
+// Гідравлічний нахил для Рейнольдса < 2000
+export const getHydraulicTilt0 = (
+  segmentDiameter,
+  segmentConsumption,
+  kinematicViscosity,
+  normalDensity
+) =>
+  1.245 *
+  10 ** 6 *
+  ((Math.abs(segmentConsumption) * kinematicViscosity * normalDensity) /
+    segmentDiameter ** 4);
+
+// Гідравлічний нахил
+export const getHydraulicTilt = (
+  reynolds,
+  pipeRoughness,
+  segmentDiameter,
+  segmentConsumption,
+  kinematicViscosity,
+  normalDensity
+) => {
+  if (reynolds >= 4000) {
+    return getHydraulicTilt4000(
+      pipeRoughness,
+      segmentDiameter,
+      segmentConsumption,
+      kinematicViscosity,
+      normalDensity
+    );
+  }
+
+  if (reynolds >= 2000 && reynolds < 4000) {
+    return getHydraulicTilt2000(
+      segmentDiameter,
+      segmentConsumption,
+      kinematicViscosity,
+      normalDensity
+    );
+  }
+
+  if (reynolds < 2000) {
+    return getHydraulicTilt0(
+      segmentDiameter,
+      segmentConsumption,
+      kinematicViscosity,
+      normalDensity
+    );
+  }
+
+  throw new Error(`Помилка в формулі гідравлічного нахилу`);
+};
+
+// Перепад тиску
+export const getDeltaPressureDrop = (hydraulicTilt, length) =>
+  hydraulicTilt * length;
+
+// Кінцевий тиск
+export const getOutSegmentPressure = (startPressure, energyParameter, length) =>
+  startPressure - (startPressure ** 2 - energyParameter * length) ** 0.5;
+
+// Значення похибки Кірхгофа
+export const getDeltaKirghof = (sumPressureDrop, absoluteSumPressureDrop) =>
+  Math.abs((sumPressureDrop / (0.5 * absoluteSumPressureDrop)) * 100);
+
+// Відношення втрат тиску до витрати газу
+export const getPressureDropToConsumption = (pressureDrop, consumption) =>
+  pressureDrop / consumption;
+
+// Поправочна витрата газу, що враховує нев‘язку у своєму контурі для мережі низького тиску
+export const getCorrectiveGasConsumption = (
+  sumPressureDrop,
+  sumPressureDropToConsumption
+) => -(sumPressureDrop / (1.75 * sumPressureDropToConsumption));
+
+// Поправочна витрата газу, що враховує нев‘язку у своєму контурі для мережі середнього тиску
+export const getCorrectiveGasConsumptionMedium = (
+  sumPressureDrop,
+  sumPressureDropToConsumption
+) => -(sumPressureDrop / (2 * sumPressureDropToConsumption));
+
+// Поправочна витрата газу, що враховує нев‘язку у сусідніх контурах
+export const getCorrectiveGasConsumptionWithNeibghor = (
+  sumCorrectiveGasConsumptions,
+  sumPressureDropToConsumption
+) => sumCorrectiveGasConsumptions / sumPressureDropToConsumption;
+
+// Загальні поправочні витрати газу
+export const getTotalCorrectionGasConsumption = (
+  correctiveGasConsumption,
+  correctiveGasConsumptionWithNeibghor
+) => correctiveGasConsumption + correctiveGasConsumptionWithNeibghor;
+
+// Уточнені витрати газу
+export const getSpecifiedConsumption = (
+  prevConsumption,
+  totalCorrectionGasConsumption,
+  modificator
+) =>
+  modificator === "addition"
+    ? prevConsumption + totalCorrectionGasConsumption
+    : prevConsumption - totalCorrectionGasConsumption;
