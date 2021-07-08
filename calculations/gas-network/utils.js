@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 
 import { getRandomNumber, getRandomFloatNumber } from "../../utils/common";
+import { PressureType } from "./const";
 
 export const adaptIncomeDataToServer = (clientData) => ({
   rch4: +clientData.methane,
@@ -31,47 +32,67 @@ export const adaptIncomeDataToServer = (clientData) => ({
   b3: +clientData["floor-high"] / 100,
 });
 
-export const adaptCirclesDataToServer = (clientData) => ({
-  physicsProps: {
-    normalDensity: +clientData.physicsProps.normalDensity,
-    kinematicViscosity: +clientData.physicsProps.kinematicViscosity * 10 ** -6,
-  },
-  networkConfig: {
-    pipeType: clientData.networkConfig.pipeType,
-    pressureType: clientData.networkConfig.pressureType,
-    pressureStart:
-      clientData.networkConfig.pressureType === "LOW"
-        ? +clientData.networkConfig["pressure-start-low"]
-        : +clientData.networkConfig["pressure-start-pressure-start-medium"],
-    pressureDrop:
-      clientData.networkConfig.pressureType === "LOW" &&
-      +clientData.networkConfig["pressure-drop"],
-    pressureEnd:
-      clientData.networkConfig.pressureType === "MEDIUM" &&
-      +clientData.networkConfig["pressure-end"],
-    kirghofScale: +clientData.networkConfig["kirghof-scale"],
-    highloadCoef: +clientData.networkConfig["highload-coef"],
-    circlesAmount: +clientData.networkConfig["circles-amount"],
-    basisRoutesAmount: +clientData.networkConfig["basis-routes"],
-  },
-  circlesConfig: {
+export const adaptCirclesDataToServer = (clientData) => {
+  const circlesConfig = {
     segmentsInCircle: Object.entries(clientData.circlesConfig)
       .filter(([key]) => key.includes("segments-amount-circle"))
       .map(([, value]) => +value),
     basisRoutesLengths: Object.entries(clientData.circlesConfig)
       .filter(([key]) => key.includes("length-basis-route"))
       .map(([, value]) => +value),
-  },
-  circlesSegments: clientData.circlesSegments.map((item) => ({
-    segmentProps: item.segmentProps,
-    segment: item.segment,
-    uniqId: item.uniqId,
-    calcConsumption: +item["consumption-calc"],
-    neighborCircleNum: +item["neighbor-circle-num"],
-    basisRouteNum: +item["basis-route-num"],
-    length: +item.length,
-  })),
-});
+  };
+
+  const circlesBreakpoints = [0];
+  circlesConfig.segmentsInCircle.reduce((prev, item) => {
+    circlesBreakpoints.push(prev + item);
+    return prev + item;
+  }, 0);
+
+  return {
+    physicsProps: {
+      normalDensity: +clientData.physicsProps.normalDensity,
+      kinematicViscosity:
+        +clientData.physicsProps.kinematicViscosity * 10 ** -6,
+    },
+    networkConfig: {
+      pipeType: clientData.networkConfig.pipeType,
+      pressureType: clientData.networkConfig.pressureType,
+      pressureStart:
+        clientData.networkConfig.pressureType === "LOW"
+          ? +clientData.networkConfig["pressure-start-low"]
+          : +clientData.networkConfig["pressure-start-medium"],
+      pressureDrop:
+        clientData.networkConfig.pressureType === "LOW" &&
+        +clientData.networkConfig["pressure-drop"],
+      pressureEnd:
+        clientData.networkConfig.pressureType === "MEDIUM" &&
+        +clientData.networkConfig["pressure-end"],
+      kirghofScale: +clientData.networkConfig["kirghof-scale"],
+      highloadCoef: +clientData.networkConfig["highload-coef"],
+      circlesAmount: +clientData.networkConfig["circles-amount"],
+      basisRoutesAmount: +clientData.networkConfig["basis-routes"],
+    },
+    circlesConfig,
+    circlesSegments: [
+      ...Array(+clientData.networkConfig["circles-amount"]),
+    ].map((circle, circleIndex) => ({
+      segments: clientData.circlesSegments
+        .slice(
+          circlesBreakpoints[circleIndex],
+          circlesBreakpoints[circleIndex + 1]
+        )
+        .map((item) => ({
+          segmentProps: item.segmentProps,
+          segment: item.segment,
+          uniqId: item.uniqId,
+          calcConsumption: +item["consumption-calc"],
+          neighborCircleNum: +item["neighbor-circle-num"],
+          basisRouteNum: +item["basis-route-num"],
+          length: +item.length,
+        })),
+    })),
+  };
+};
 
 export const getConsumptionsSegmentsConfig = (clientData) => {
   const totalSegments = Object.values(clientData).reduce(
@@ -156,3 +177,36 @@ export const getCirclesSegmentsConfig = (clientData) => {
     {}
   );
 };
+
+export const fixResultsValues = (results, pressureType) =>
+  pressureType === PressureType.LOW
+    ? results.map((item) => ({
+        ...item,
+        segments: item.segments.map((segment) => ({
+          ...segment,
+          calcConsumption: segment.calcConsumption.toFixed(2),
+          hydraulicTilt: segment.hydraulicTilt.toFixed(2),
+          deltaPressureDrop: segment.deltaPressureDrop.toFixed(2),
+          averageHydraulicInclination:
+            segment.averageHydraulicInclination.toFixed(2),
+        })),
+        sumPressureDrop: item.sumPressureDrop.toFixed(3),
+        absoluteSumPressureDrop: item.absoluteSumPressureDrop.toFixed(1),
+        deltaKirghof: item.deltaKirghof.toFixed(2),
+        uniqId: nanoid(),
+      }))
+    : results.map((item) => ({
+        ...item,
+        segments: item.segments.map((segment) => ({
+          ...segment,
+          calcConsumption: segment.calcConsumption.toFixed(2),
+          hydraulicTilt: (segment.hydraulicTilt * 10 ** 5).toFixed(2),
+          averageHydraulicInclination: (
+            segment.averageHydraulicInclination *
+            10 ** 5
+          ).toFixed(2),
+          pressureOut: (segment.pressureOut * 10 ** 6).toFixed(),
+        })),
+        deltaKirghof: item.deltaKirghof.toFixed(2),
+        uniqId: nanoid(),
+      }));
