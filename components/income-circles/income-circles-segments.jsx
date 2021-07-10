@@ -135,8 +135,8 @@ const IncomeCirclesSegments = ({
 
       const incomeFormation = {
         physicsProps: {
-          normalDensity: physicsProps.RoN,
-          kinematicViscosity: physicsProps.nyu,
+          normalDensity: physicsProps.normalDensity,
+          kinematicViscosity: physicsProps.kinematicViscosity,
         },
         networkConfig,
         circlesConfig,

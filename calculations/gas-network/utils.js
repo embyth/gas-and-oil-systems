@@ -4,13 +4,6 @@ import { getRandomNumber, getRandomFloatNumber } from "../../utils/common";
 import { PressureType } from "./const";
 
 export const adaptIncomeDataToServer = (clientData) => ({
-  rch4: +clientData.methane,
-  rc2h6: +clientData.ethane,
-  rc3h8: +clientData.propane,
-  rc4h10: +clientData.butane,
-  rc5h12: +clientData.pentane,
-  rn2: +clientData.nitrogen,
-  rco2: +clientData["carbon-dioxide"],
   n: +clientData["inhibitants-amount"],
   t0: +clientData["temperature-for-heating"],
   tv: +clientData["temperature-for-venting"],

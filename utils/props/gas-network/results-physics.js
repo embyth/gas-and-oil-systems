@@ -28,7 +28,7 @@ export const GAS_NETWORK_PHYSICS_RESULT_FIELDS = {
     {
       isFullRow: false,
       type: `physical-properties`,
-      id: `mu`,
+      id: `molarMass`,
       parameter: `Молярна маса газу`,
       marking: `μ`,
       dimension: `кг/кмоль`,
@@ -36,7 +36,7 @@ export const GAS_NETWORK_PHYSICS_RESULT_FIELDS = {
     {
       isFullRow: false,
       type: `physical-properties`,
-      id: `RoN`,
+      id: `normalDensity`,
       parameter: `Густина природного газу за нормальних умов`,
       marking: `ρ<sub>н</sub>`,
       dimension: `кг/м<sup>3</sup>`,
@@ -44,14 +44,14 @@ export const GAS_NETWORK_PHYSICS_RESULT_FIELDS = {
     {
       isFullRow: false,
       type: `physical-properties`,
-      id: `delta`,
+      id: `relativeDensity`,
       parameter: `Відносна густина газу за повітрям`,
       marking: `Δ`,
       dimension: ``,
     },
     {
       isFullRow: false,
-      id: `RoSt`,
+      id: `standartDensity`,
       type: `physical-properties`,
       parameter: `Густина природного газу за стандартних фізичних умов`,
       marking: `ρ<sub>ст</sub>`,
@@ -60,7 +60,7 @@ export const GAS_NETWORK_PHYSICS_RESULT_FIELDS = {
     {
       isFullRow: false,
       type: `physical-properties`,
-      id: `Rgas`,
+      id: `gasConst`,
       parameter: `Газова стала природного газу`,
       marking: `R`,
       dimension: `Дж/кг·К`,
@@ -68,7 +68,7 @@ export const GAS_NETWORK_PHYSICS_RESULT_FIELDS = {
     {
       isFullRow: false,
       type: `physical-properties`,
-      id: `Pkr`,
+      id: `pseudoPressure`,
       parameter: `Псевдокритичний тиск природного газу`,
       marking: `P<sub>кр</sub>`,
       dimension: `МПа`,
@@ -76,7 +76,7 @@ export const GAS_NETWORK_PHYSICS_RESULT_FIELDS = {
     {
       isFullRow: false,
       type: `physical-properties`,
-      id: `Tkr`,
+      id: `pseudoTemperature`,
       parameter: `Псевдокритична температура природного газу`,
       marking: `T<sub>кр`,
       dimension: `K`,
@@ -84,7 +84,7 @@ export const GAS_NETWORK_PHYSICS_RESULT_FIELDS = {
     {
       isFullRow: false,
       type: `physical-properties`,
-      id: `Qnr`,
+      id: `lowerVolumetricHeat`,
       parameter: `Нижча об’ємна теплота згорання`,
       marking: `Q<sub>нр</sub>`,
       dimension: `кДж/м<sup>3</sup>`,
@@ -92,7 +92,7 @@ export const GAS_NETWORK_PHYSICS_RESULT_FIELDS = {
     {
       isFullRow: false,
       type: `physical-properties`,
-      id: `Qnm`,
+      id: `lowerMassHeatOfCombustion`,
       parameter: `Нижча масова теплота згорання газу`,
       marking: `Q<sub>нр</sub>'`,
       dimension: `кДж/кг`,
@@ -100,7 +100,7 @@ export const GAS_NETWORK_PHYSICS_RESULT_FIELDS = {
     {
       isFullRow: false,
       type: `physical-properties`,
-      id: `eta`,
+      id: `dynamicViscosity`,
       parameter: `Динамічна в'язкість природного газу`,
       marking: `η·10<sup>-6</sup>`,
       dimension: `Па·с`,
@@ -108,7 +108,7 @@ export const GAS_NETWORK_PHYSICS_RESULT_FIELDS = {
     {
       isFullRow: false,
       type: `physical-properties`,
-      id: `nyu`,
+      id: `kinematicViscosity`,
       parameter: `Кінематична в'язкість природного газу`,
       marking: `υ·10<sup>-6</sup>`,
       dimension: `м<sup>2</sup>/с`,

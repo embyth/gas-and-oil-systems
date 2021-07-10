@@ -1,9 +1,13 @@
+import { calculate as calculateGasPhysics } from "../gas-physics/algorithm";
+
 import { adaptClientDataToServer } from "./utils";
 import * as formulas from "./formulas";
 import { GPU, SUPERCHARGER } from "./const";
 
 export const calculate = (clientData) => {
   const data = adaptClientDataToServer(clientData);
+  const { physicalProperties: gasPhysicalProperties } =
+    calculateGasPhysics(clientData);
 
   // Отримуємо вихідні дані
   let { Q, coefE, Tvx, Tgr } = data;
@@ -12,24 +16,13 @@ export const calculate = (clientData) => {
   Tgr += 273;
 
   const {
-    ch4,
-    c2h6,
-    c3h8,
-    c4h10,
-    c5h12,
-    n2,
-    co2,
-    Dz,
-    bSt,
-    L,
-    Patm,
-    Pvx,
-    Ta,
-    PkNeed,
-    coefK,
-    gpu,
-    supercharger,
-  } = data;
+    relativeDensity: delta,
+    gasConst: R,
+    standartDensity: roSt,
+    lowerVolumetricHeat: Qnr,
+  } = gasPhysicalProperties;
+
+  const { Dz, bSt, L, Patm, Pvx, Ta, PkNeed, coefK, gpu, supercharger } = data;
 
   // Постійні параметри для ГПА
   const PARAMS = {};
@@ -79,55 +72,7 @@ export const calculate = (clientData) => {
   }
 
   // Об'єкт з результатами
-  const results = {};
-
-  // Визначаємо молярну масу природного газу
-  const mu = +formulas.getMolarMass(ch4, c2h6, c3h8, c4h10, c5h12, n2, co2);
-  results.mu = mu.toFixed(2);
-
-  // Знаходимо густину природного газу за нормальних умов
-  const roNorm = +formulas.getNormalDensity(mu);
-  results.RoN = roNorm.toFixed(4);
-
-  // Визначаємо відносну густину газу за повітрям
-  const delta = +formulas.getRelativeDensity(roNorm);
-  results.delta = delta.toFixed(4);
-
-  // Визначаємо густину газу за стандартних фізичних умов
-  const roSt = +formulas.getStandartDensity(delta);
-  results.RoSt = roSt.toFixed(4);
-
-  // Визначаємо газову сталу природного газу
-  const R = +formulas.getGasConst(delta);
-  results.Rgas = R.toFixed(1);
-
-  // Знаходимо псевдокритичний тиск природного газу
-  const Pkr = +formulas.getPseudoPressure(
-    ch4,
-    c2h6,
-    c3h8,
-    c4h10,
-    c5h12,
-    n2,
-    co2
-  );
-  results.Pkr = Pkr.toFixed(3);
-
-  // Знаходимо псевдокритичне значення температури природного газу
-  const Tkr = +formulas.getPseudoTemperature(
-    ch4,
-    c2h6,
-    c3h8,
-    c4h10,
-    c5h12,
-    n2,
-    co2
-  );
-  results.Tkr = Tkr.toFixed(1);
-
-  // Обчислюємо нижчу теплоту згорання газу
-  const Qnr = +formulas.getLowerVolumetricHeat(ch4, c2h6, c3h8, c4h10, c5h12);
-  results.Qnr = Qnr.toFixed(0);
+  const results = { ...gasPhysicalProperties };
 
   // Визначаємо розрахункову температуру повітря на вході ГТУ
   const Tz = +formulas.getAirTemperature(Ta);

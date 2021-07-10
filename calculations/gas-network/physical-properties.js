@@ -1,3 +1,5 @@
+import { calculate as calculateGasPhysics } from "../gas-physics/algorithm";
+
 import { adaptIncomeDataToServer } from "./utils";
 import * as formulas from "./formulas";
 
@@ -5,15 +7,10 @@ import { IncreasedIndicatorsOfMaximumHeatFlux } from "./const";
 
 export const calculatePhysicalProperties = (clientData) => {
   const data = adaptIncomeDataToServer(clientData);
+  const { physicalProperties: gasPhysicalProperties } =
+    calculateGasPhysics(clientData);
 
   const {
-    rch4,
-    rc2h6,
-    rc3h8,
-    rc4h10,
-    rc5h12,
-    rn2,
-    rco2,
     n,
     t0,
     tv,
@@ -35,93 +32,12 @@ export const calculatePhysicalProperties = (clientData) => {
     b3,
   } = data;
 
+  const { lowerVolumetricHeat: Qnr } = gasPhysicalProperties;
+
   const results = {
-    "physical-properties": {},
+    "physical-properties": gasPhysicalProperties,
     "consumption-by-consumers": {},
   };
-
-  // Розрахунок фізичних властивостей природного газу
-  // Визначаємо молярну масу природного газу
-  const mu = +formulas.getMolarMass(
-    rch4,
-    rc2h6,
-    rc3h8,
-    rc4h10,
-    rc5h12,
-    rn2,
-    rco2
-  );
-  results["physical-properties"].mu = mu.toFixed(2);
-
-  // Знаходимо густину природного газу за нормальних умов
-  const roNorm = +formulas.getNormalDensity(mu);
-  results["physical-properties"].RoN = roNorm.toFixed(4);
-
-  // Визначаємо відносну густину газу за повітрям
-  const delta = +formulas.getRelativeDensity(roNorm);
-  results["physical-properties"].delta = delta.toFixed(4);
-
-  // Визначаємо густину газу за стандартних фізичних умов
-  const roSt = +formulas.getStandartDensity(delta);
-  results["physical-properties"].RoSt = roSt.toFixed(4);
-
-  // Визначаємо газову сталу природного газу
-  const R = +formulas.getGasConst(delta);
-  results["physical-properties"].Rgas = R.toFixed(1);
-
-  // Знаходимо псевдокритичний тиск природного газу
-  const Pkr = +formulas.getPseudoPressure(
-    rch4,
-    rc2h6,
-    rc3h8,
-    rc4h10,
-    rc5h12,
-    rn2,
-    rco2
-  );
-  results["physical-properties"].Pkr = Pkr.toFixed(3);
-
-  // Знаходимо псевдокритичне значення температури природного газу
-  const Tkr = +formulas.getPseudoTemperature(
-    rch4,
-    rc2h6,
-    rc3h8,
-    rc4h10,
-    rc5h12,
-    rn2,
-    rco2
-  );
-  results["physical-properties"].Tkr = Tkr.toFixed(1);
-
-  // Обчислюємо нижчу теплоту згорання газу
-  const Qnr = +formulas.getLowerVolumetricHeat(
-    rch4,
-    rc2h6,
-    rc3h8,
-    rc4h10,
-    rc5h12
-  );
-  results["physical-properties"].Qnr = Qnr.toFixed(0);
-
-  // Обчислюємо нижчу масову теплоту згорання газу
-  const Qnm = +formulas.getLowerMassHeatOfCombustion(Qnr, roNorm);
-  results["physical-properties"].Qnm = Qnm.toFixed(0);
-
-  // Визначаємо коефіцієнт динамічної в'язкості газу
-  const eta = +formulas.getDynamicViscosity(
-    rch4,
-    rc2h6,
-    rc3h8,
-    rc4h10,
-    rc5h12,
-    rn2,
-    rco2
-  );
-  results["physical-properties"].eta = eta.toFixed(2);
-
-  // Обчислюємо кінематичну в'язкість природного газу
-  const nyu = +formulas.getKinematicViscosity(eta, roNorm);
-  results["physical-properties"].nyu = nyu.toFixed(2);
 
   // Розрахунок витрат газу споживачами сільського населеного пункту
   // Річна витрата тепла на господарсько-побутові потреби населення у житлових будинках
