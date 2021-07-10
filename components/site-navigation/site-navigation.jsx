@@ -41,6 +41,25 @@ const SiteNavigation = ({ currentCalculation }) => {
         <ul className="site-aside__links-list">
           <li
             className={`site-aside__links-item ${
+              currentCalculation === AvailableCalculation.GAS_PHYSICS
+                ? `site-aside__links-item--active`
+                : ``
+            }`}
+          >
+            <Link href="/gas-physics">
+              <a
+                className={`${
+                  currentCalculation === AvailableCalculation.GAS_PHYSICS
+                    ? `site-aside__links-item--disabled`
+                    : ``
+                }`}
+              >
+                Розрахунок фізичних властивостей газу
+              </a>
+            </Link>
+          </li>
+          <li
+            className={`site-aside__links-item ${
               currentCalculation === AvailableCalculation.GAS_NETWORK
                 ? `site-aside__links-item--active`
                 : ``
