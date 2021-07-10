@@ -26,7 +26,6 @@ const OilTransmissionPage = ({
         <CalculationDataContextProvider>
           <Layout currentCalculation={currentCalculation}>
             <OilTransmission
-              currentCalculation={currentCalculation}
               screensInfo={screensInfo}
               introInfo={introInfo}
               incomeInputFields={incomeInputFields}

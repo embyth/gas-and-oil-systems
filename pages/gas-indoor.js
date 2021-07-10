@@ -29,7 +29,6 @@ const GasIndoorPage = ({
         <CalculationDataContextProvider>
           <Layout currentCalculation={currentCalculation}>
             <GasIndoor
-              currentCalculation={currentCalculation}
               screensInfo={screensInfo}
               introInfo={introInfo}
               incomeInputFields={incomeInputFields}
