@@ -29,6 +29,13 @@ import { GAS_NETWORK_CONSUMPTIONS_INPUT_FIELDS } from "./gas-network/income-cons
 import { GAS_NETWORK_CIRCLES_INPUT_FIELDS } from "./gas-network/income-circles";
 import { GAS_NETWORK_CIRCLES_RESULT_FIELDS } from "./gas-network/results-circles";
 
+import {
+  GAS_PHYSICS_INTRO_DATA,
+  GAS_PHYSICS_SCREENS,
+} from "./gas-physics/info";
+import { GAS_PHYSICS_INPUT_FIELDS } from "./gas-physics/income";
+import { GAS_PHYSICS_RESULT_FIELDS } from "./gas-physics/results";
+
 import { AvailableCalculation } from "../const";
 
 export const getIndexProps = () => ({
@@ -77,4 +84,12 @@ export const getGasNetworkProps = () => ({
   consumptionsInputFields: GAS_NETWORK_CONSUMPTIONS_INPUT_FIELDS,
   circlesInputFields: GAS_NETWORK_CIRCLES_INPUT_FIELDS,
   circlesResults: GAS_NETWORK_CIRCLES_RESULT_FIELDS,
+});
+
+export const getGasPhysicsProps = () => ({
+  currentCalculation: AvailableCalculation.GAS_PHYSICS,
+  screensInfo: GAS_PHYSICS_SCREENS,
+  introInfo: GAS_PHYSICS_INTRO_DATA,
+  incomeInputFields: GAS_PHYSICS_INPUT_FIELDS,
+  resultFields: GAS_PHYSICS_RESULT_FIELDS,
 });

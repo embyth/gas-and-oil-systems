@@ -10,6 +10,7 @@ export const AvailableCalculation = {
   GAS_INDOOR: "GAS_INDOOR",
   GAS_NETWORK: "GAS_NETWORK",
   GAS_BRANCHES: "GAS_BRANCHES",
+  GAS_PHYSICS: "GAS_PHYSICS",
 };
 
 export const LocalStorage = {
@@ -37,6 +38,10 @@ export const LocalStorage = {
     CIRCLES_CONFIG: `${AvailableCalculation.GAS_NETWORK}-CIRCLES--CONFIG`,
     CIRCLES_SEGMENTS: `${AvailableCalculation.GAS_NETWORK}-CIRCLES--SEGMENTS`,
     RESULTS: `${AvailableCalculation.GAS_NETWORK}-RESULTS`,
+  },
+  GAS_PHYSICS: {
+    INCOME: `${AvailableCalculation.GAS_PHYSICS}-INCOME`,
+    RESULTS: `${AvailableCalculation.GAS_PHYSICS}-RESULTS`,
   },
 };
 
