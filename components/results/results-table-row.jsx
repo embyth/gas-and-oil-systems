@@ -3,6 +3,7 @@ import parse from "html-react-parser";
 import ResultsTableStationRows from "./results-table-station-rows";
 import ResultsTableSegmentRows from "./results-table-segment-rows";
 import ResultsTableCircleRows from "./results-table-circle-rows";
+import ResultsTableBranchRows from "./results-table-branch-rows";
 
 import { AvailableResultRowType } from "../../utils/const";
 
@@ -41,6 +42,10 @@ const ResultsTableRow = ({
 
   if (type === AvailableResultRowType.CIRCLE) {
     return <ResultsTableCircleRows results={results} circleFields={typeData} />;
+  }
+
+  if (type === AvailableResultRowType.BRACNHES) {
+    return <ResultsTableBranchRows results={results} branchFields={typeData} />;
   }
 
   return (
