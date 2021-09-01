@@ -39,6 +39,11 @@ export const LocalStorage = {
     CIRCLES_SEGMENTS: `${AvailableCalculation.GAS_NETWORK}-CIRCLES--SEGMENTS`,
     RESULTS: `${AvailableCalculation.GAS_NETWORK}-RESULTS`,
   },
+  GAS_BRANCHES: {
+    INCOME: `${AvailableCalculation.GAS_BRANCHES}-INCOME`,
+    SEGMENTS: `${AvailableCalculation.GAS_BRANCHES}-SEGMENTS`,
+    RESULTS: `${AvailableCalculation.GAS_BRANCHES}-RESULTS`,
+  },
   GAS_PHYSICS: {
     INCOME: `${AvailableCalculation.GAS_PHYSICS}-INCOME`,
     RESULTS: `${AvailableCalculation.GAS_PHYSICS}-RESULTS`,
@@ -51,6 +56,7 @@ export const AvailableResultRowType = {
   STATION: `station`,
   SEGMENT: `segment`,
   CIRCLE: `circle`,
+  BRACNHES: `branches`,
 };
 
 export const MediaBreakpoint = {
