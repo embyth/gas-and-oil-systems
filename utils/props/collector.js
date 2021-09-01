@@ -30,6 +30,14 @@ import { GAS_NETWORK_CIRCLES_INPUT_FIELDS } from "./gas-network/income-circles";
 import { GAS_NETWORK_CIRCLES_RESULT_FIELDS } from "./gas-network/results-circles";
 
 import {
+  GAS_BRANCHES_INTRO_DATA,
+  GAS_BRANCHES_SCREENS,
+} from "./gas-branches/info";
+import { GAS_BRANCHES_INPUT_FIELDS } from "./gas-branches/income";
+import { GAS_BRANCHES_SEGMENTS_INPUT_FIELDS } from "./gas-branches/income-segments";
+import { GAS_BRANCHES_RESULT_FIELDS } from "./gas-branches/results";
+
+import {
   GAS_PHYSICS_INTRO_DATA,
   GAS_PHYSICS_SCREENS,
 } from "./gas-physics/info";
@@ -84,6 +92,15 @@ export const getGasNetworkProps = () => ({
   consumptionsInputFields: GAS_NETWORK_CONSUMPTIONS_INPUT_FIELDS,
   circlesInputFields: GAS_NETWORK_CIRCLES_INPUT_FIELDS,
   circlesResults: GAS_NETWORK_CIRCLES_RESULT_FIELDS,
+});
+
+export const getGasBranchesProps = () => ({
+  currentCalculation: AvailableCalculation.GAS_BRANCHES,
+  screensInfo: GAS_BRANCHES_SCREENS,
+  introInfo: GAS_BRANCHES_INTRO_DATA,
+  incomeInputFields: GAS_BRANCHES_INPUT_FIELDS,
+  incomeSegmentsInputFields: GAS_BRANCHES_SEGMENTS_INPUT_FIELDS,
+  branchesResults: GAS_BRANCHES_RESULT_FIELDS,
 });
 
 export const getGasPhysicsProps = () => ({
