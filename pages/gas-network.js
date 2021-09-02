@@ -21,7 +21,9 @@ const GasNetworkPage = ({
 }) => (
   <>
     <Head>
-      <title>Розрахунок системи газопостачання населеного пункту</title>
+      <title>
+        Розрахунок кільцевої системи газопостачання населеного пункту
+      </title>
     </Head>
     <ScreenContextProvider initialState={screensInfo}>
       <CalculationTypeContextProvider calculation={currentCalculation}>
