@@ -1,34 +1,46 @@
-# This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)
+# :fire: Розрахунок газових та нафтових систем
 
-## Getting Started
+[![Vercel Status][vercel-image]][vercel-url] [![Dependency status][dependency-image]][dependency-url]
 
-First, run the development server:
+Сервіс для розрахунку режимів роботи нафто-, газопроводів, газових мереж та внутрішньобудинкових газових мереж
+
+Автор: [Ростислав Мінюков](https://github.com/embyth/)
+
+[**Сайт**](https://gas-and-oil-systems.vercel.app/)
+
+---
+
+## Структура проекту
 
 ```bash
-npm run dev
-# or
-yarn dev
+.
+├── calculations/             # директорія розрахунків
+│   ├── gas-branches/         # директорія розрахунку розгалуженої газової мережі
+│   ├── gas-indoor/           # директорія розрахунку внутрішньобудинкової газової мережі
+│   ├── gas-network/          # директорія розрахунку кільцевої газової мережі
+│   ├── gas-physics/          # директорія розрахунку фізичних властивостей газу
+│   ├── gas-transmission/     # директорія розрахунку режиму роботи газотранспортної системи
+│   └── oil-transmission/     # директорія розрахунку пропускної здатності магістрального нафтопроводу
+├── components/               # директорія React компонентів
+├── content/                  # директорія Markdown документації для розрахунків
+├── hooks/                    # директорія React хуків
+├── pages/                    # директорія NextJs сторінок
+│   └── api/                  # директорія обробників запиту до API
+├── public/                   # директорія загальнодоступних файлів (стилі, шрифти, картинки)
+├── store/                    # директорія глобального контексту (сховище)
+├── utils/                    # директорія допоміжних та утилітарних функцій
+│   └── props/                # директорія статичних пропсів для NextJs
+├── .editorconfig             # конфігурація Editorconfig
+├── .eslintrc.json            # конфігурація ESLint
+├── .gitattributes            # Git attributes файл
+├── .gitignore                # Git ignore файл
+├── LICENSE                   # ліцензія проекту
+├── package.json              # npm залежності та файл з налаштуваннями проекту
+├── package-lock.json         # npm lock-файл
+└── README.md                 # документація проекту
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[vercel-image]: https://therealsujitk-vercel-badge.vercel.app/?app=gas-and-oil-systems&style=flat-square
+[vercel-url]: https://vercel.com/embyth/gas-and-oil-systems
+[dependency-image]: https://david-dm.org/embyth/gas-and-oil-systems/dev-status.svg?style=flat-square
+[dependency-url]: https://david-dm.org/embyth/gas-and-oil-systems?type=dev
