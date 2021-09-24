@@ -3,6 +3,7 @@ import Head from "next/head";
 const HeadWithSeo = () => (
   <Head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-site-verification" content="F_y6DxwPJ12dxob8VYKGDxDxVN1jcQOB-3k32X2tVz4" />
     <link rel="stylesheet" href="assets/css/libs/normalize.css" />
     <link rel="stylesheet" href="assets/css/style.min.css" />
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
